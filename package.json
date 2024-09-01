@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@gradio/client": "^1.5.1",
+    "axios": "^1.7.7",
+    "express": "^4.19.2",
+    "form-data": "^4.0.0",
+    "fs": "^0.0.1-security",
+    "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "medai",
+  "version": "1.0.0",
+  "main": "server.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ocular Disease Prediction</title>
+</head>
+<body>
+  <h1>Upload Left and Right Eye Images</h1>
+  <form action="/predict" method="post" enctype="multipart/form-data">
+    <label for="left_image">Left Eye Image:</label>
+    <input type="file" id="left_image" name="left_image" accept="image/*" required>
+    <br>
+    <label for="right_image">Right Eye Image:</label>
+    <input type="file" id="right_image" name="right_image" accept="image/*" required>
+    <br><br>
+    <input type="submit" value="Upload and Predict">
+  </form>
+</body>
+</html>
