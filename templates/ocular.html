@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ocular Disease Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #4CAF50;
+    }
+    form {
+      margin-top: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input[type="file"] {
+      margin: 10px 0;
+    }
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    .result-container {
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+    .confidence-bar {
+      height: 20px;
+      background-color: #ddd;
+      margin-top: 5px;
+      position: relative;
+    }
+    .confidence-fill {
+      height: 100%;
+      background-color: #4CAF50;
+      text-align: right;
+      padding-right: 5px;
+      color: white;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Upload Left and Right Eye Images</h1>
+  <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data">
+    <label for="left_image">Left Eye Image:</label>
+    <input type="file" id="left_image" name="left_image" accept="image/*" required>
+    <br>
+    <label for="right_image">Right Eye Image:</label>
+    <input type="file" id="right_image" name="right_image" accept="image/*" required>
+    <br><br>
+    <input type="submit" value="Upload and Predict">
+  </form>
+
+  <div id="resultContainer" class="result-container" style="display:none;">
+    <h2>Prediction Results</h2>
+    <div id="results"></div>
+  </div>
+
+  <script>
+    document.getElementById('uploadForm').onsubmit = async function(event) {
+      event.preventDefault(); // Prevent the form from submitting in the traditional way
+
+      const formData = new FormData(this);
+
+      const response = await fetch('/predict', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+
+      // Process the result and display it
+      displayResults(result.data[0].confidences);
+    };
+
+    function displayResults(confidences) {
+      const resultContainer = document.getElementById('resultContainer');
+      const resultsDiv = document.getElementById('results');
+
+      // Clear previous results
+      resultsDiv.innerHTML = '';
+
+      confidences.forEach(item => {
+        const confidenceLabel = document.createElement('p');
+        confidenceLabel.innerText = item.label;
+
+        const confidenceBar = document.createElement('div');
+        confidenceBar.className = 'confidence-bar';
+
+        const confidenceFill = document.createElement('div');
+        confidenceFill.className = 'confidence-fill';
+        confidenceFill.style.width = (item.confidence * 100) + '%';
+        confidenceFill.innerText = (item.confidence * 100).toFixed(2) + '%';
+
+        confidenceBar.appendChild(confidenceFill);
+        resultsDiv.appendChild(confidenceLabel);
+        resultsDiv.appendChild(confidenceBar);
+      });
+
+      // Show the results container
+      resultContainer.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
