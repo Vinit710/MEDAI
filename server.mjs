@@ -32,10 +32,17 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// Serve static files and the HTML form for uploading images
-app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from 'public' folder
+// Serve static files and the HTML forms
+app.use(express.static(path.join(__dirname, 'static'))); // Serve static files from 'public' folder
+
+// Serve the index.html file
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'index.html'));
+});
+
+// Serve the ocular.html file
+app.get('/ocular', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'ocular.html'));
 });
 
 // Handle image uploads and predictions
