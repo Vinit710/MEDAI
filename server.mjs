@@ -32,8 +32,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// Serve static files and the HTML forms
-app.use(express.static(path.join(__dirname, 'static'))); // Serve static files from 'public' folder
+// Serve static files
+app.use('/static', express.static(path.join(__dirname, 'static')))
 
 // Serve the index.html file
 app.get('/', (req, res) => {
@@ -77,7 +77,7 @@ app.post('/predict', upload.fields([{ name: 'left_image' }, { name: 'right_image
       console.error('No valid prediction label received.');
       res.status(500).json({ error: 'No valid prediction label received.' });
     }
-
+    
     // Clean up uploaded files
     fs.unlinkSync(leftImagePath);
     fs.unlinkSync(rightImagePath);
