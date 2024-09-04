@@ -1,212 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Healthcare Assistant</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
     <style>
-        /* General Styling */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+      /* General Styling */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
 
-        /* Navigation Bar */
-        .navbar {
-            background-color: #333;
-            color: white;
-            padding: 15px;
-        }
+      /* Navigation Bar */
+      .navbar {
+        background-color: #333;
+        color: white;
+        padding: 15px;
+      }
 
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      .navbar .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-        .navbar .logo {
-            font-size: 24px;
-            text-decoration: none;
-            color: white;
-        }
+      .navbar .logo {
+        font-size: 24px;
+        text-decoration: none;
+        color: white;
+      }
 
-        .navbar .nav-links {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
+      .navbar .nav-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
 
-        .navbar .nav-links li {
-            display: inline;
-            margin-left: 15px;
-        }
+      .navbar .nav-links li {
+        display: inline;
+        margin-left: 15px;
+      }
 
-        .navbar .nav-links a {
-            text-decoration: none;
-            color: white;
-            font-size: 18px;
-        }
+      .navbar .nav-links a {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+      }
 
-        /* Carousel */
-        .carousel {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            overflow: hidden;
-        }
+      /* Carousel */
+      .carousel {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+      }
 
-        .carousel-images {
-            display: flex;
-            width: 300%;
-            transition: transform 0.5s ease-in-out;
-        }
+      .carousel-images {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+      }
 
-        .carousel-images img {
-            width: 33.33%;
-            height: 300px;
-            object-fit: cover;
-        }
+      .carousel-images img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+      }
 
-        /* Chatbot */
-        .chatbot-container {
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
+      /* Chatbot */
+      .chatbot-container {
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
 
-        .chatbot-header {
-            text-align: center;
-        }
+      .chatbot-header {
+        text-align: center;
+      }
 
-        .chatbot-body {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            background: #f9f9f9;
-        }
+      .chatbot-body {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        background: #f9f9f9;
+      }
 
-        #chatbox {
-            border: 1px solid #ccc;
-            padding: 10px;
-            height: 200px;
-            overflow-y: auto;
-        }
+      #chatbox {
+        border: 1px solid #ccc;
+        padding: 10px;
+        height: 200px;
+        overflow-y: auto;
+      }
 
-        .chatbot-buttons {
-            text-align: center;
-            margin-top: 10px;
-        }
+      .chatbot-buttons {
+        text-align: center;
+        margin-top: 10px;
+      }
 
-        .chatbot-buttons button {
-            margin: 5px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
+      .chatbot-buttons button {
+        margin: 5px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+      }
 
-        .chatbot-buttons button:hover {
-            background-color: #0056b3;
-        }
+      .chatbot-buttons button:hover {
+        background-color: #0056b3;
+      }
 
-        #additional-buttons {
-            text-align: center;
-            margin-top: 20px;
-        }
+      #additional-buttons {
+        text-align: center;
+        margin-top: 20px;
+      }
 
-        #additional-buttons button {
-            margin: 5px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #28a745;
-            color: white;
-            cursor: pointer;
-        }
+      #additional-buttons button {
+        margin: 5px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #28a745;
+        color: white;
+        cursor: pointer;
+      }
 
-        #additional-buttons button:hover {
-            background-color: #218838;
-        }
+      #additional-buttons button:hover {
+        background-color: #218838;
+      }
 
-        /* Hidden class */
-        .hidden {
-            display: none;
-        }
+      /* Hidden class */
+      .hidden {
+        display: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navigation Bar -->
     <nav class="navbar">
-        <div class="container">
-            <a href="#" class="logo">HealthBot</a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
+      <div class="container">
+        <a href="#" class="logo">HealthBot</a>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
     </nav>
 
     <!-- Carousel -->
     <div class="carousel">
-        <div class="carousel-images">
-            <img src="\medai\right_eye.jpg" alt="Healthcare">
-            <img src="static\images\image2.jpg" alt="Healthcare">
-            <img src="static\images\image3.jpg" alt="Healthcare">
-        </div>
+      <div class="carousel-images">
+        <img src="static/images/image1.jpg" alt="Healthcare" />
+        <img src="static/images/image2.jpg" alt="Healthcare" />
+        <img src="static/images/image3.jpg" alt="Healthcare" />
+      </div>
     </div>
 
     <!-- Chatbot Interface -->
     <div class="chatbot-container">
-        <div class="chatbot-header">
-            <h2>Smart Healthcare Assistant</h2>
+      <div class="chatbot-header">
+        <h2>Smart Healthcare Assistant</h2>
+      </div>
+      <div class="chatbot-body">
+        <div id="chatbox">
+          <p>How can I assist you today?</p>
         </div>
-        <div class="chatbot-body">
-            <div id="chatbox">
-                <p>How can I assist you today?</p>
-            </div>
-            <div class="chatbot-buttons">
-                <button id="doctors-btn">Doctors</button>
-                <button id="patients-btn">Patients</button>
-            </div>
-            <div id="additional-buttons" class="hidden">
-                <button onclick="location.href='ocular.html'">Ocular Scan</button>
-                <button>X-Ray Scan</button>
-                <button>Talk with Other Doctors</button>
-            </div>
+        <div class="chatbot-buttons">
+          <button id="doctors-btn">Doctors</button>
+          <button id="patients-btn">Patients</button>
         </div>
+        <div id="additional-buttons" class="hidden">
+          <button onclick="location.href='ocular.html'">Ocular Scan</button>
+          <button>X-Ray Scan</button>
+          <button>Talk with Other Doctors</button>
+        </div>
+      </div>
     </div>
 
     <!-- JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const doctorsBtn = document.getElementById('doctors-btn');
-            const patientsBtn = document.getElementById('patients-btn');
-            const additionalButtons = document.getElementById('additional-buttons');
+      document.addEventListener("DOMContentLoaded", () => {
+        const doctorsBtn = document.getElementById("doctors-btn");
+        const patientsBtn = document.getElementById("patients-btn");
+        const additionalButtons = document.getElementById("additional-buttons");
 
-            doctorsBtn.addEventListener('click', () => {
-                additionalButtons.classList.toggle('hidden');
-            });
-
-            patientsBtn.addEventListener('click', () => {
-                additionalButtons.classList.add('hidden');
-            });
-            document.getElementById('additional-buttons').addEventListener('click', () => {
-            window.location.href = '/ocular';  // Redirect to ocular.html
+        doctorsBtn.addEventListener("click", () => {
+          additionalButtons.classList.toggle("hidden");
         });
 
-            // Simple carousel functionality
-            let index = 0;
-            const images = document.querySelectorAll('.carousel-images img');
-            setInterval(() => {
-                index = (index + 1) % images.length;
-                document.querySelector('.carousel-images').style.transform = `translateX(-${index * 100}%)`;
-            }, 3000);
+        patientsBtn.addEventListener("click", () => {
+          additionalButtons.classList.add("hidden");
         });
+        document
+          .getElementById("additional-buttons")
+          .addEventListener("click", () => {
+            window.location.href = "/ocular"; // Redirect to ocular.html
+          });
+
+        document.addEventListener("DOMContentLoaded", () => {
+          const carouselImages = document.querySelector(".carousel-images");
+          const images = document.querySelectorAll(".carousel-images img");
+          let index = 0;
+
+          function updateCarouselWidth() {
+            const imageWidth = images[0].clientWidth;
+            carouselImages.style.width = `${images.length * imageWidth}px`;
+            carouselImages.style.transform = `translateX(-${
+              index * imageWidth
+            }px)`;
+          }
+
+          function showNextImage() {
+            index = (index + 1) % images.length;
+            const imageWidth = images[0].clientWidth;
+            carouselImages.style.transform = `translateX(-${
+              index * imageWidth
+            }px)`;
+          }
+
+          // Update carousel width initially and on window resize
+          updateCarouselWidth();
+          window.addEventListener("resize", updateCarouselWidth);
+
+          // Automatically change the image every 3 seconds
+          setInterval(showNextImage, 3000);
+        });
+      });
     </script>
-</body>
+  </body>
 </html>
