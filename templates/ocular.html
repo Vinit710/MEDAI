@@ -1,128 +1,250 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Ocular Disease Prediction</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      color: #333;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
-    h1 {
-      color: #4CAF50;
-    }
-    form {
-      margin-top: 20px;
-    }
-    label {
-      font-weight: bold;
-    }
-    input[type="file"] {
-      margin: 10px 0;
-    }
-    input[type="submit"] {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    input[type="submit"]:hover {
-      background-color: #45a049;
-    }
-    .result-container {
-      margin-top: 20px;
-      padding: 20px;
-      border: 1px solid #ddd;
-      background-color: #fff;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
-    }
-    .confidence-bar {
-      height: 20px;
-      background-color: #ddd;
-      margin-top: 5px;
-      position: relative;
-    }
-    .confidence-fill {
-      height: 100%;
-      background-color: #4CAF50;
-      text-align: right;
-      padding-right: 5px;
-      color: white;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocular Scan - MED.ai</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #0056b3;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .scan-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+        }
+        .confidence-bar {
+            background-color: #e9ecef;
+            border-radius: 5px;
+            height: 25px;
+            margin-bottom: 10px;
+        }
+        .confidence-fill {
+            background-color: #0056b3;
+            height: 100%;
+            border-radius: 5px;
+            color: white;
+            text-align: right;
+            padding-right: 5px;
+            line-height: 25px;
+            transition: width 0.5s ease-in-out;
+        }
+        #uploadForm {
+            margin-bottom: 20px;
+        }
+        .image-preview {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        footer {
+            background-color: #0056b3;
+            color: white;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Upload Left and Right Eye Images</h1>
-  <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data">
-    <label for="left_image">Left Eye Image:</label>
-    <input type="file" id="left_image" name="left_image" accept="image/*" required>
-    <br>
-    <label for="right_image">Right Eye Image:</label>
-    <input type="file" id="right_image" name="right_image" accept="image/*" required>
-    <br><br>
-    <input type="submit" value="Upload and Predict">
-  </form>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">MED.ai</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-  <div id="resultContainer" class="result-container" style="display:none;">
-    <h2>Prediction Results</h2>
-    <div id="results"></div>
-  </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="scan-container">
+                    <h2 class="text-center mb-4">Ocular Scan Analysis</h2>
+                    <p class="lead text-center mb-4">Upload images of both eyes for our AI to analyze and provide insights.</p>
+                    
+                    <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="left_image" class="form-label">Left Eye Image:</label>
+                            <input type="file" class="form-control" id="left_image" name="left_image" accept="image/*" required>
+                            <img id="leftPreview" class="image-preview mt-2" src="#" alt="Left eye preview" style="display:none;">
+                        </div>
+                        <div class="mb-3">
+                            <label for="right_image" class="form-label">Right Eye Image:</label>
+                            <input type="file" class="form-control" id="right_image" name="right_image" accept="image/*" required>
+                            <img id="rightPreview" class="image-preview mt-2" src="#" alt="Right eye preview" style="display:none;">
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-eye me-2"></i>Analyze Eyes
+                            </button>
+                        </div>
+                    </form>
 
-  <script>
-    document.getElementById('uploadForm').onsubmit = async function(event) {
-      event.preventDefault(); // Prevent the form from submitting in the traditional way
+                    <div id="loadingIndicator" class="text-center mt-4" style="display:none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing images. Please wait...</p>
+                    </div>
 
-      const formData = new FormData(this);
+                    <div id="resultContainer" class="mt-4" style="display:none;">
+                        <h3 class="mb-3">Analysis Results</h3>
+                        <div id="results"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-      const response = await fetch('/predict', {
-        method: 'POST',
-        body: formData
-      });
+    <footer class="mt-5">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-4">
+                  <h5>About MED.ai</h5>
+                  <p>MED.ai is a cutting-edge healthcare assistant powered by artificial intelligence, designed to revolutionize the way we approach medical diagnoses and patient care.</p>
+              </div>
+              <div class="col-md-4">
+                  <h5>Quick Links</h5>
+                  <ul class="list-unstyled">
+                      <li><a href="/" class="text-white">Home</a></li>
+                      <li><a href="/about" class="text-white">About</a></li>
+                      <li><a href="/contact" class="text-white">Contact</a></li>
+                      <li><a href="#" class="text-white">Privacy Policy</a></li>
+                  </ul>
+              </div>
+              <div class="col-md-4">
+                  <h5>Connect with Us</h5>
+                  <ul class="list-unstyled">
+                      <li><a href="https://github.com/your-github-repo" target="_blank" class="text-white"><i class="fab fa-github me-2"></i>GitHub</a></li>
+                      <li><a href="#" class="text-white"><i class="fab fa-twitter me-2"></i>Twitter</a></li>
+                      <li><a href="#" class="text-white"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
+                  </ul>
+              </div>
+          </div>
+          <hr class="bg-light">
+          <div class="row">
+              <div class="col-md-12 text-center">
+                  <p>&copy; 2024 MED.ai. All rights reserved.</p>
+              </div>
+          </div>
+      </div>
+  </footer>
 
-      const result = await response.json();
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function previewImage(input, previewId) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(previewId).style.display = 'block';
+                    document.getElementById(previewId).src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
-      // Process the result and display it
-      displayResults(result.data[0].confidences);
-    };
+        document.getElementById('left_image').addEventListener('change', function() {
+            previewImage(this, 'leftPreview');
+        });
 
-    function displayResults(confidences) {
-      const resultContainer = document.getElementById('resultContainer');
-      const resultsDiv = document.getElementById('results');
+        document.getElementById('right_image').addEventListener('change', function() {
+            previewImage(this, 'rightPreview');
+        });
 
-      // Clear previous results
-      resultsDiv.innerHTML = '';
+        document.getElementById('uploadForm').onsubmit = async function(event) {
+            event.preventDefault();
 
-      confidences.forEach(item => {
-        const confidenceLabel = document.createElement('p');
-        confidenceLabel.innerText = item.label;
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const resultContainer = document.getElementById('resultContainer');
 
-        const confidenceBar = document.createElement('div');
-        confidenceBar.className = 'confidence-bar';
+            loadingIndicator.style.display = 'block';
+            resultContainer.style.display = 'none';
 
-        const confidenceFill = document.createElement('div');
-        confidenceFill.className = 'confidence-fill';
-        confidenceFill.style.width = (item.confidence * 100) + '%';
-        confidenceFill.innerText = (item.confidence * 100).toFixed(2) + '%';
+            const formData = new FormData(this);
 
-        confidenceBar.appendChild(confidenceFill);
-        resultsDiv.appendChild(confidenceLabel);
-        resultsDiv.appendChild(confidenceBar);
-      });
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
 
-      // Show the results container
-      resultContainer.style.display = 'block';
-    }
-  </script>
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+
+                displayResults(result.data[0].confidences);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        };
+
+        function displayResults(confidences) {
+            const resultContainer = document.getElementById('resultContainer');
+            const resultsDiv = document.getElementById('results');
+
+            resultsDiv.innerHTML = '';
+
+            confidences.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'mb-3';
+
+                const confidenceLabel = document.createElement('p');
+                confidenceLabel.className = 'mb-1';
+                confidenceLabel.innerHTML = `<strong>${item.label}:</strong>`;
+
+                const confidenceBar = document.createElement('div');
+                confidenceBar.className = 'confidence-bar';
+
+                const confidenceFill = document.createElement('div');
+                confidenceFill.className = 'confidence-fill';
+                confidenceFill.style.width = '0%';
+                confidenceFill.innerText = '0%';
+
+                confidenceBar.appendChild(confidenceFill);
+                row.appendChild(confidenceLabel);
+                row.appendChild(confidenceBar);
+                resultsDiv.appendChild(row);
+
+                setTimeout(() => {
+                    confidenceFill.style.width = (item.confidence * 100) + '%';
+                    confidenceFill.innerText = (item.confidence * 100).toFixed(2) + '%';
+                }, 100);
+            });
+
+            resultContainer.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
