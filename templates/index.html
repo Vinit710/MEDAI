@@ -1,227 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Healthcare Assistant</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/styles.css') }}"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MED.ai - Smart Healthcare Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-      /* General Styling */
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-      }
-
-      /* Navigation Bar */
-      .navbar {
-        background-color: #333;
-        color: white;
-        padding: 15px;
-      }
-
-      .navbar .container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .navbar .logo {
-        font-size: 24px;
-        text-decoration: none;
-        color: white;
-      }
-
-      .navbar .nav-links {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
-
-      .navbar .nav-links li {
-        display: inline;
-        margin-left: 15px;
-      }
-
-      .navbar .nav-links a {
-        text-decoration: none;
-        color: white;
-        font-size: 18px;
-      }
-
-      /* Carousel */
-      .carousel {
-        position: relative;
-        width: 100%;
-        height: 300px;
-        overflow: hidden;
-      }
-
-      .carousel-images {
-        display: flex;
-        transition: transform 0.5s ease-in-out;
-      }
-
-      .carousel-images img {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-      }
-
-      /* Chatbot */
-      .chatbot-container {
-        padding: 20px;
-        max-width: 800px;
-        margin: 0 auto;
-      }
-
-      .chatbot-header {
-        text-align: center;
-      }
-
-      .chatbot-body {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 10px;
-        background: #f9f9f9;
-      }
-
-      #chatbox {
-        border: 1px solid #ccc;
-        padding: 10px;
-        height: 200px;
-        overflow-y: auto;
-      }
-
-      .chatbot-buttons {
-        text-align: center;
-        margin-top: 10px;
-      }
-
-      .chatbot-buttons button {
-        margin: 5px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-      }
-
-      .chatbot-buttons button:hover {
-        background-color: #0056b3;
-      }
-
-      #additional-buttons {
-        text-align: center;
-        margin-top: 20px;
-      }
-
-      #additional-buttons button {
-        margin: 5px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #28a745;
-        color: white;
-        cursor: pointer;
-      }
-
-      #additional-buttons button:hover {
-        background-color: #218838;
-      }
-
-      /* Hidden class */
-      .hidden {
-        display: none;
-      }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #0056b3;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .carousel-item img {
+            object-fit: cover;
+            height: 600px;
+        }
+        .intro-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: -100px;
+            position: relative;
+            z-index: 1000;
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #0056b3;
+        }
+        .chatbot-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+        }
+        #chatbox {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .btn-primary {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .btn-primary:hover {
+            background-color: #003d82;
+            border-color: #003d82;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #218838;
+        }
+        footer {
+            background-color: #0056b3;
+            color: white;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
     </style>
-  </head>
-  <body>
-    <nav class="navbar">
-      <div class="container">
-        <a href="/" class="logo">HealthBot</a>
-        <ul class="nav-links">
-          <li><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li> <!-- Updated link to point to about.html -->
-          <li><a href="/contact">Contact</a></li> <!-- Ensure contact.html exists if used -->
-        </ul>
-      </div>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">MED.ai</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
-  
-    <!-- Carousel -->
-    <div class="carousel">
-      <div class="carousel-images">
-        <img src="static/images/image1.jpg" alt="Healthcare" />
-        <img src="static/images/image2.jpg" alt="Healthcare" />
-        <img src="static/images/image3.jpg" alt="Healthcare" />
-      </div>
-    </div>
-  
-    <!-- Chatbot Interface -->
-    <div class="chatbot-container">
-      <div class="chatbot-header">
-        <h2>Smart Healthcare Assistant</h2>
-      </div>
-      <div class="chatbot-body">
-        <div id="chatbox">
-          <p>How can I assist you today?</p>
-        </div>
-        <div class="chatbot-buttons">
-          <button id="doctors-btn">Doctors</button>
-          <button id="patients-btn">Patients</button>
-        </div>
-        <div id="additional-buttons" class="hidden">
-          <button onclick="window.location.href='/ocular'">Ocular Scan</button>
-          <button onclick="window.location.href='/skin_disease'">Skin Disease</button>
 
-
-          <button>Talk with Other Doctors</button>
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
-      </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/static/images/image2.jpg" class="d-block w-100" alt="Healthcare 1">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Welcome to MED.ai</h2>
+                    <p>Your Smart Healthcare Assistant</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/static/images/image1.jpg" class="d-block w-100" alt="Healthcare 2">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Advanced AI Diagnostics</h2>
+                    <p>Cutting-edge technology at your service</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/static/images/image3.jpg" class="d-block w-100" alt="Healthcare 3">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Connecting Doctors and Patients</h2>
+                    <p>Bridging the gap in healthcare</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-  
-    <!-- JavaScript -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="intro-container text-center">
+                    <h2 class="mb-4">Revolutionizing Healthcare with AI</h2>
+                    <p class="lead">MED.ai combines cutting-edge artificial intelligence with medical expertise to provide you with accurate diagnoses and personalized healthcare solutions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <h2 class="text-center mb-4">Our Features</h2>
+            <div class="col-md-4 text-center">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI-Powered Diagnosis</h3>
+                <p>Utilize our advanced AI algorithms for quick and accurate medical diagnoses.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="feature-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3>Connect with Doctors</h3>
+                <p>Easily connect with qualified healthcare professionals for consultations.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="feature-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3>Health Monitoring</h3>
+                <p>Keep track of your vital signs and health metrics with our intelligent monitoring system.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="chatbot-container">
+                    <h2 class="text-center mb-4">Smart Healthcare Assistant</h2>
+                    <div id="chatbox" class="mb-3">
+                        <p>How can I assist you today?</p>
+                    </div>
+                    <div class="d-flex justify-content-center mb-3">
+                        <button id="doctors-btn" class="btn btn-primary me-2">
+                            <i class="fas fa-user-md me-2"></i>Doctors
+                        </button>
+                        <button id="patients-btn" class="btn btn-primary">
+                            <i class="fas fa-procedures me-2"></i>Patients
+                        </button>
+                    </div>
+                    <div id="additional-buttons" class="text-center hidden">
+                        <button onclick="window.location.href='/ocular'" class="btn btn-success me-2 mb-2">
+                            <i class="fas fa-eye me-2"></i>Ocular Scan
+                        </button>
+                        <button onclick="window.location.href='/skin_disease'" class="btn btn-success me-2 mb-2">
+                            <i class="fas fa-allergies me-2"></i>Skin Disease
+                        </button>
+                        <button class="btn btn-success mb-2">
+                            <i class="fas fa-comments me-2"></i>Talk with Other Doctors
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About MED.ai</h5>
+                    <p>MED.ai is a cutting-edge healthcare assistant powered by artificial intelligence, designed to revolutionize the way we approach medical diagnoses and patient care.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-white">Home</a></li>
+                        <li><a href="/about" class="text-white">About</a></li>
+                        <li><a href="/contact" class="text-white">Contact</a></li>
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect with Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/your-github-repo" target="_blank" class="text-white"><i class="fab fa-github me-2"></i>GitHub</a></li>
+                        <li><a href="#" class="text-white"><i class="fab fa-twitter me-2"></i>Twitter</a></li>
+                        <li><a href="#" class="text-white"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>&copy; 2024 MED.ai. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const doctorsBtn = document.getElementById("doctors-btn");
-        const patientsBtn = document.getElementById("patients-btn");
-        const additionalButtons = document.getElementById("additional-buttons");
-  
-        doctorsBtn.addEventListener("click", () => {
-          additionalButtons.classList.toggle("hidden");
+        document.addEventListener("DOMContentLoaded", () => {
+            const doctorsBtn = document.getElementById("doctors-btn");
+            const patientsBtn = document.getElementById("patients-btn");
+            const additionalButtons = document.getElementById("additional-buttons");
+        
+            doctorsBtn.addEventListener("click", () => {
+            additionalButtons.classList.toggle("hidden");
+            });
+        
+            patientsBtn.addEventListener("click", () => {
+            additionalButtons.classList.add("hidden");
+            });
         });
-  
-        patientsBtn.addEventListener("click", () => {
-          additionalButtons.classList.add("hidden");
-        });
-  
-        const carouselImages = document.querySelector(".carousel-images");
-        const images = document.querySelectorAll(".carousel-images img");
-        let index = 0;
-  
-        function updateCarouselWidth() {
-          const imageWidth = images[0].clientWidth;
-          carouselImages.style.width = `${images.length * imageWidth}px`;
-          carouselImages.style.transform = `translateX(-${index * imageWidth}px)`;
-        }
-  
-        function showNextImage() {
-          index = (index + 1) % images.length;
-          const imageWidth = images[0].clientWidth;
-          carouselImages.style.transform = `translateX(-${index * imageWidth}px)`;
-        }
-  
-        // Update carousel width initially and on window resize
-        updateCarouselWidth();
-        window.addEventListener("resize", updateCarouselWidth);
-  
-        // Automatically change the image every 3 seconds
-        setInterval(showNextImage, 3000);
-      });
     </script>
-  </body>
-  </html>
+</body>
+</html>
