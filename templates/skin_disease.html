@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skin Disease Detection</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Arial', sans-serif;
+    }
+    .navbar {
+      background-color: #007bff;
+    }
+    .navbar .logo {
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .navbar .nav-links a {
+      color: #fff;
+    }
+    .container {
+      margin-top: 50px;
+    }
+    #result-container {
+      margin-top: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #prediction-result {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #28a745;
+    }
+    footer {
+      margin-top: 50px;
+      padding: 20px;
+      text-align: center;
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a href="/" class="logo navbar-brand">HealthBot</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto nav-links">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container">
+    <h1 class="text-center">Skin Disease Detection</h1>
+    <p class="text-center">Upload an image of the affected skin area to get a diagnosis:</p>
+
+    <!-- Form for image upload -->
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form id="skin-disease-form" enctype="multipart/form-data" class="text-center">
+          <div class="form-group">
+            <input type="file" id="input-image" name="input_image" accept="image/*" class="form-control-file" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Detect Disease</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Section to display the result -->
+    <div id="result-container" class="text-center">
+      <h2>Prediction Result:</h2>
+      <p id="prediction-result">No prediction yet.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 HealthBot | Skin Disease Detection</p>
+  </footer>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- JavaScript for form handling -->
+  <script>
+    document.getElementById('skin-disease-form').addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevent form from submitting normally
+  
+      // Get the image file from the form
+      const imageFile = document.getElementById('input-image').files[0];
+      if (!imageFile) {
+        alert('Please upload an image.');
+        return;
+      }
+  
+      // Prepare the form data to send via POST request
+      const formData = new FormData();
+      formData.append('input_image', imageFile);
+  
+      try {
+        // Send POST request to the server
+        const response = await fetch('/predict_skin', {
+          method: 'POST',
+          body: formData
+        });
+  
+        if (!response.ok) {
+          throw new Error('Prediction failed');
+        }
+  
+        // Log the full response
+        const result = await response.json();
+        console.log('Prediction result:', result); // Log the result for debugging
+  
+        // Ensure the result contains the correct label data
+        if (result.data && result.data[0]) {
+          const predictionLabel = result.data[0];  // Extract the prediction result
+          document.getElementById('prediction-result').innerText = `The image looks like it can be a case of ${predictionLabel}.`;
+        } else {
+          document.getElementById('prediction-result').innerText = 'No valid prediction label received.';
+        }
+  
+      } catch (error) {
+        // Log errors for better debugging
+        console.error('Error:', error);
+        document.getElementById('prediction-result').innerText = 'Error occurred during prediction. Please try again.';
+      }
+    });
+  </script>
+  
+  
+</body>
+</html>
