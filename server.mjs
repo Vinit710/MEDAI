@@ -17,6 +17,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Initialize the Gradio client
 const client = await Client.connect("Vinit710/GMED");  // Replace with your actual Gradio app
+const skinClient = await Client.connect("Vinit710/Skin_Disease"); 
 
 const app = express();
 const port = 3000;
@@ -40,12 +41,23 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'index.html'));
 });
 
-// Serve the ocular.html file
+app.get('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'about.html'));
+});
+
+app.get('/contact', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'contact.html'));
+});
+
 app.get('/ocular', (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'ocular.html'));
 });
 
-// Handle image uploads and predictions
+app.get('/skin_disease', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'skin_disease.html'));
+});
+
+// Handle image uploads and predictions for ocular
 app.post('/predict', upload.fields([{ name: 'left_image' }, { name: 'right_image' }]), async (req, res) => {
   try {
     const leftImagePath = req.files['left_image'][0].path;
@@ -89,6 +101,57 @@ app.post('/predict', upload.fields([{ name: 'left_image' }, { name: 'right_image
     res.status(500).json({ error: error.message });
   }
 });
+
+// Handle skin disease image upload and prediction
+app.post('/predict_skin', upload.single('input_image'), async (req, res) => {
+  try {
+    // Get the image path
+    const imagePath = req.file.path;
+    console.log(`Image path: ${imagePath}`);
+
+    // Read the uploaded image as a buffer
+    const imageBuffer = fs.readFileSync(imagePath);
+
+    // Convert the buffer into a Blob object to send to the prediction API
+    const imageBlob = new Blob([imageBuffer], { type: 'image/png' });  // Change MIME type if necessary
+
+    console.log('Making prediction...');
+
+    // Send the image for prediction using the skinClient
+    const result = await skinClient.predict("/predict", {
+      img: imageBlob  // Correctly send the image as 'img' parameter
+    });
+
+    // Log the prediction result
+    console.log('Prediction result:', result);
+
+    // Check if the result contains the expected label
+    if (result && result.data && result.data[0]) {
+      const predictedLabel = result.data[0];
+      console.log(`Predicted label: ${predictedLabel}`);
+      
+      // Return the prediction result as JSON
+      res.status(200).json({ data: [predictedLabel] });
+    } else {
+      console.error('No valid prediction label received.');
+      res.status(500).json({ error: 'No valid prediction label received.' });
+    }
+
+  } catch (error) {
+    // Log the error for debugging
+    console.error('Error:', error.message);
+    console.error('Stack Trace:', error.stack);
+
+    // Return an error response
+    res.status(500).json({ error: 'Prediction failed. ' + error.message });
+  } finally {
+    // Clean up the uploaded image file
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);  // Ensure the file is deleted even in case of errors
+    }
+  }
+});
+
 
 // Start the server
 app.listen(port, () => {
