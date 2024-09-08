@@ -18,9 +18,13 @@ if (!fs.existsSync(uploadsDir)) {
 // Initialize the Gradio client
 const client = await Client.connect("Vinit710/GMED");  // Replace with your actual Gradio app
 const skinClient = await Client.connect("Vinit710/Skin_Disease"); 
+// Initialize the Gradio client
+const chatClient = await Client.connect("featherless-ai/try-this-model");
 
 const app = express();
 const port = 3000;
+app.use(express.json());  // Built-in middleware for parsing JSON
+app.use(express.static('public'));
 
 // Set up multer for file uploads
 const storage = multer.diskStorage({
@@ -43,6 +47,10 @@ app.get('/', (req, res) => {
 
 app.get('/about', (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'about.html'));
+});
+
+app.get('/chatbot', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'chatbot.html'));
 });
 
 app.get('/contact', (req, res) => {
@@ -149,6 +157,25 @@ app.post('/predict_skin', upload.single('input_image'), async (req, res) => {
     if (fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);  // Ensure the file is deleted even in case of errors
     }
+  }
+});
+
+// Chatbot API endpoint
+app.post('/chatbot', async (req, res) => {
+  const userMessage = req.body.message;
+
+  try {
+    // Make the API call to the Hugging Face model
+    const result = await chatClient.predict("/chat", {
+      message: userMessage,
+      model: "42MARU/GenAI-llama2-ko-en-platypus-13B-v2" // Use the default or change model if needed
+    });
+
+    // Send the response back to the front-end
+    res.json({ reply: result.data });
+  } catch (error) {
+    console.error("Error calling the model:", error);
+    res.status(500).json({ error: "Failed to get response from the model." });
   }
 });
 
