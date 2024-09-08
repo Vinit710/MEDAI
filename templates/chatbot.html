@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 50%;
+      max-width: 800px;
+      min-width: 300px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    .chatbox {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .chatbox p {
+      padding: 10px;
+      background: #f1f1f1;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .chatbox .user-message {
+      text-align: right;
+      background: #c1e1c1;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .input-container input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    .input-container button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .input-container button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <h2>Medical Chatbot</h2>
+    <div id="chatbox" class="chatbox">
+      <p>Bot: How can I assist you today?</p>
+    </div>
+    <div class="input-container">
+      <input type="text" id="messageInput" placeholder="Type your message...">
+      <button id="sendMessage">Send</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('sendMessage').addEventListener('click', async () => {
+      const message = document.getElementById('messageInput').value;
+      if (!message.trim()) return;
+      
+      // Display user message in the chatbox
+      const chatbox = document.getElementById('chatbox');
+      const userMessage = document.createElement('p');
+      userMessage.textContent = `You: ${message}`;
+      userMessage.classList.add('user-message');
+      chatbox.appendChild(userMessage);
+
+      // Clear the input field
+      document.getElementById('messageInput').value = '';
+
+      // Call the API to get the response
+      const response = await fetch('/chatbot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message })
+      });
+      const data = await response.json();
+
+      // Display bot response in the chatbox
+      const botMessage = document.createElement('p');
+      botMessage.textContent = `Bot: ${data.reply}`;
+      chatbox.appendChild(botMessage);
+
+      // Scroll to the bottom of the chatbox
+      chatbox.scrollTop = chatbox.scrollHeight;
+    });
+  </script>
+</body>
+</html>
