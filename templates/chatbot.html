@@ -1,124 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Medical Chatbot</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .chat-container {
-      width: 50%;
-      max-width: 800px;
-      min-width: 300px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-    }
-
-    .chatbox {
-      max-height: 400px;
-      overflow-y: auto;
-      margin-bottom: 20px;
-      border: 1px solid #ddd;
-      padding: 10px;
-      border-radius: 5px;
-    }
-
-    .chatbox p {
-      padding: 10px;
-      background: #f1f1f1;
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
-
-    .chatbox .user-message {
-      text-align: right;
-      background: #c1e1c1;
-    }
-
-    .input-container {
-      display: flex;
-      align-items: center;
-    }
-
-    .input-container input {
-      flex-grow: 1;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      margin-right: 10px;
-    }
-
-    .input-container button {
-      padding: 10px 20px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .input-container button:hover {
-      background: #0056b3;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MED.ai Chatbot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            transition: background-color 0.3s ease;
+        }
+        .navbar {
+            background-color: #0056b3;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .chat-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+        .chat-history {
+            width: 250px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            overflow-y: auto;
+        }
+        .chat-history-header {
+            background-color: #0056b3;
+            color: white;
+            padding: 1rem;
+        }
+        .chat-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        #chatbox {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background-color: #f8f9fa;
+        }
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #0056b3;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .bot-message {
+            background-color: #e9ecef;
+            color: #212529;
+            align-self: flex-start;
+        }
+        .input-group {
+            border-top: 1px solid #dee2e6;
+        }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #0056b3;
+        }
+        .btn-primary {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .btn-primary:hover {
+            background-color: #003d82;
+            border-color: #003d82;
+        }
+        .toggle-container {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .toggle-label {
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        #userTypeToggle {
+            width: 60px;
+            height: 30px;
+        }
+        .dark-mode {
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+        .dark-mode #chatbox {
+            background-color: #212529;
+        }
+        .dark-mode .bot-message {
+            background-color: #495057;
+            color: #f8f9fa;
+        }
+        .dark-mode .toggle-container {
+            background-color: #212529;
+            border-color: #495057;
+        }
+        /* Tools & Diagnosis */
+        .tools-button {
+            position: relative;
+            margin-left: 10px;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+        }
+    </style>
 </head>
 <body>
-  <div class="chat-container">
-    <h2>Medical Chatbot</h2>
-    <div id="chatbox" class="chatbox">
-      <p>Bot: How can I assist you today?</p>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">MED.ai</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/chatbot">Chat Now</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="chat-container">
+        <div class="chat-history">
+            <div class="chat-history-header">Chat History</div>
+            <div id="history-list"></div>
+        </div>
+        <div class="chat-content">
+            <div class="toggle-container d-flex justify-content-between align-items-center">
+                <span class="toggle-label">User Type:</span>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="userTypeToggle">
+                    <label class="form-check-label" for="userTypeToggle">
+                        <span id="userTypeLabel">Patient</span>
+                    </label>
+                    <button id="toolsButton" class="btn btn-primary tools-button" style="display: none;">
+                        Tools & Diagnosis
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Ocular Scan</a></li>
+                            <li><a class="dropdown-item" href="#">Skin Diagnosis</a></li>
+                            <li><a class="dropdown-item" href="#">X-ray Diagnosis</a></li>
+                        </ul>
+                    </button>
+                </div>
+            </div>
+            <div id="chatbox" class="d-flex flex-column">
+                <div class="message bot-message">
+                    <i class="fas fa-robot me-2"></i>How can I assist you today?
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" id="messageInput" class="form-control" placeholder="Type your message...">
+                <button class="btn btn-primary" type="button" id="sendMessage">
+                    <i class="fas fa-paper-plane me-2"></i>Send
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="input-container">
-      <input type="text" id="messageInput" placeholder="Type your message...">
-      <button id="sendMessage">Send</button>
-    </div>
-  </div>
 
-  <script>
-    document.getElementById('sendMessage').addEventListener('click', async () => {
-      const message = document.getElementById('messageInput').value;
-      if (!message.trim()) return;
-      
-      // Display user message in the chatbox
-      const chatbox = document.getElementById('chatbox');
-      const userMessage = document.createElement('p');
-      userMessage.textContent = `You: ${message}`;
-      userMessage.classList.add('user-message');
-      chatbox.appendChild(userMessage);
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const chatbox = document.getElementById('chatbox');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendMessage');
+        const userTypeToggle = document.getElementById('userTypeToggle');
+        const userTypeLabel = document.getElementById('userTypeLabel');
+        const toolsButton = document.getElementById('toolsButton');
+        const historyList = document.getElementById('history-list');
 
-      // Clear the input field
-      document.getElementById('messageInput').value = '';
+        function addMessage(content, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
+            messageDiv.innerHTML = isUser ? content : `<i class="fas fa-robot me-2"></i>${content}`;
+            chatbox.appendChild(messageDiv);
+            chatbox.scrollTop = chatbox.scrollHeight;
 
-      // Call the API to get the response
-      const response = await fetch('/chatbot', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ message })
-      });
-      const data = await response.json();
+            // Add to history
+            const historyItem = document.createElement('div');
+            historyItem.textContent = content;
+            historyList.appendChild(historyItem);
+        }
 
-      // Display bot response in the chatbox
-      const botMessage = document.createElement('p');
-      botMessage.textContent = `Bot: ${data.reply}`;
-      chatbox.appendChild(botMessage);
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
 
-      // Scroll to the bottom of the chatbox
-      chatbox.scrollTop = chatbox.scrollHeight;
-    });
-  </script>
+            addMessage(message, true);
+            messageInput.value = '';
+
+            try {
+                const response = await fetch('/chatbot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+                const data = await response.json();
+                addMessage(data.reply, false);
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('Sorry, there was an error processing your request.', false);
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        userTypeToggle.addEventListener('change', () => {
+            const isDoctor = userTypeToggle.checked;
+            userTypeLabel.textContent = isDoctor ? 'Doctor' : 'Patient';
+            toolsButton.style.display = isDoctor ? 'block' : 'none';
+            document.body.classList.toggle('dark-mode', !isDoctor);
+        });
+    </script>
 </body>
 </html>
