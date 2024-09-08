@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { Client } from '@gradio/client';
+import bodyParser from 'body-parser';
 
 // Define __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -19,11 +20,11 @@ if (!fs.existsSync(uploadsDir)) {
 const client = await Client.connect("Vinit710/GMED");  // Replace with your actual Gradio app
 const skinClient = await Client.connect("Vinit710/Skin_Disease"); 
 // Initialize the Gradio client
-const chatClient = await Client.connect("featherless-ai/try-this-model");
+const chatClient = await Client.connect('peteparker456/medical_bot-llama2');
 
 const app = express();
 const port = 3000;
-app.use(express.json());  // Built-in middleware for parsing JSON
+app.use(bodyParser.json());
 app.use(express.static('public'));
 
 // Set up multer for file uploads
@@ -160,22 +161,24 @@ app.post('/predict_skin', upload.single('input_image'), async (req, res) => {
   }
 });
 
-// Chatbot API endpoint
 app.post('/chatbot', async (req, res) => {
   const userMessage = req.body.message;
 
   try {
-    // Make the API call to the Hugging Face model
-    const result = await chatClient.predict("/chat", {
-      message: userMessage,
-      model: "42MARU/GenAI-llama2-ko-en-platypus-13B-v2" // Use the default or change model if needed
-    });
+      // Call the API to get the chatbot's response
+      const result = await chatClient.predict('/chat', {
+          message: userMessage,
+          system_message: "You are a friendly chatbot.",  // Custom system message
+          max_tokens: 512,  // Define the max tokens for the response
+          temperature: 0.7,  // Control the randomness of the response
+          top_p: 0.95        // Control diversity via nucleus sampling
+      });
 
-    // Send the response back to the front-end
-    res.json({ reply: result.data });
+      // Return the chatbot response to the front-end
+      res.json({ reply: result.data });
   } catch (error) {
-    console.error("Error calling the model:", error);
-    res.status(500).json({ error: "Failed to get response from the model." });
+      console.error('Error communicating with the API:', error);
+      res.status(500).json({ reply: "Sorry, something went wrong with the chatbot." });
   }
 });
 
