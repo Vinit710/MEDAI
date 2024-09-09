@@ -66,6 +66,10 @@ app.get('/skin_disease', (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'skin_disease.html'));
 });
 
+app.get('/docs', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'docs.html'));
+});
+
 // Handle image uploads and predictions for ocular
 app.post('/predict', upload.fields([{ name: 'left_image' }, { name: 'right_image' }]), async (req, res) => {
   try {
