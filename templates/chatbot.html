@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body { background-color: #f8f9fa; }
+        body { background-color: #111111; }
         .chat-container { display: flex; max-width: 900px; margin: 50px auto; }
         .chat-history { flex: 1; background-color: #ffffff; border-right: 1px solid #ccc; padding: 20px; height: 500px; overflow-y: auto; }
         .chat-history-header { font-weight: bold; margin-bottom: 20px; }
@@ -20,7 +20,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">MED.ai</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,10 +29,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link active" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/chatbot">Chat Now</a>
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                    <li class="nav-item"></li>
+                        <a class="nav-link" href="/chatbot">Chat Now</a>
                     </li>
                 </ul>
             </div>
@@ -65,54 +71,60 @@
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendMessage');
         const historyList = document.getElementById('history-list');
+        let currentSession = [];
+        let sessionId;
 
-        // Load chat history sessions from localStorage
-        function loadChatSessions() {
-            const sessions = Object.keys(localStorage);
+        // Initialize or load sessions
+        function initializeSession() {
+            const storedSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
+            sessionId = storedSessions.length + 1; // Start a new session
+            displayChatHistory(storedSessions);
+        }
+
+        // Save current chat session on page unload
+        function saveCurrentSession() {
+            const storedSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
+            storedSessions.push({ id: `Chat ${sessionId}`, messages: currentSession });
+            localStorage.setItem('chatSessions', JSON.stringify(storedSessions));
+        }
+
+        // Display chat history from previous sessions
+        function displayChatHistory(sessions) {
             historyList.innerHTML = '';
-            sessions.forEach(session => {
-                const sessionDiv = document.createElement('div');
-                sessionDiv.textContent = `Chat on ${session}`;
-                sessionDiv.addEventListener('click', () => loadChatFromSession(session));
-                historyList.appendChild(sessionDiv);
+            sessions.forEach((session) => {
+                const historyItem = document.createElement('div');
+                historyItem.textContent = session.id;
+                historyItem.classList.add('history-item');
+                historyItem.addEventListener('click', () => loadChatHistory(session.messages));
+                historyList.appendChild(historyItem);
             });
         }
 
-        // Save the chat session
-        function saveChatSession(session, chatHistory) {
-            localStorage.setItem(session, JSON.stringify(chatHistory));
+        // Load a previous chat session
+        function loadChatHistory(messages) {
+            chatbox.innerHTML = ''; // Clear current chatbox
+            messages.forEach(msg => addMessage(msg.content, msg.isUser)); // Load previous messages
         }
 
-        // Add a new message to the chatbox and history
+        // Add message to chatbox and current session
         function addMessage(content, isUser) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
             messageDiv.innerHTML = isUser ? content : `<i class="fas fa-robot me-2"></i>${content}`;
             chatbox.appendChild(messageDiv);
             chatbox.scrollTop = chatbox.scrollHeight;
+
+            // Save message in current session
+            currentSession.push({ content, isUser });
         }
 
-        // Load chat from a specific session
-        function loadChatFromSession(session) {
-            chatbox.innerHTML = '';
-            const chatHistory = JSON.parse(localStorage.getItem(session)) || [];
-            chatHistory.forEach(item => {
-                addMessage(item.message, item.isUser);
-            });
-        }
-
-        // Handle sending a message
+        // Handle sending user message
         async function sendMessage() {
             const message = messageInput.value.trim();
             if (!message) return;
 
             // Add user message to chat
             addMessage(message, true);
-
-            const chatHistory = JSON.parse(localStorage.getItem(currentSession)) || [];
-            chatHistory.push({ message, isUser: true });
-            saveChatSession(currentSession, chatHistory);
-
             messageInput.value = '';
 
             // Send message to server
@@ -123,11 +135,7 @@
                     body: JSON.stringify({ message })
                 });
                 const data = await response.json();
-
-                // Add bot response to chat
                 addMessage(data.reply, false);
-                chatHistory.push({ message: data.reply, isUser: false });
-                saveChatSession(currentSession, chatHistory);
             } catch (error) {
                 console.error('Error:', error);
                 addMessage('Sorry, there was an error processing your request.', false);
@@ -139,16 +147,12 @@
             if (e.key === 'Enter') sendMessage();
         });
 
-        // Start a new chat session
-        const currentSession = new Date().toLocaleDateString();
-        loadChatSessions();
+        // When user reloads the page, save current session
+        window.onbeforeunload = saveCurrentSession;
 
-        // Load chat history when the page loads
-        window.onload = () => {
-            if (localStorage.getItem(currentSession)) {
-                loadChatFromSession(currentSession);
-            }
-        };
+        // Initialize new session when page loads
+        window.onload = initializeSession;
     </script>
 </body>
 </html>
+
