@@ -3,97 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MED.ai Chatbot</title>
+    <title>Chatbot</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            transition: background-color 0.3s ease;
+        body { background-color: #f8f9fa; }
+        .chat-container { display: flex; max-width: 1200px; margin: 50px auto; }
+        .chat-history { flex: 1; background-color: #ffffff; border-right: 1px solid #ccc; padding: 20px; height: 500px; overflow-y: auto; }
+        .chat-history-header { font-weight: bold; margin-bottom: 20px; }
+        .chat-content { flex: 3; padding: 20px; background-color: #fefefe; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        .message { margin-bottom: 10px; padding: 10px; border-radius: 10px; }
+        .user-message { background-color: #007bff; color: white; align-self: flex-end; }
+        .bot-message { background-color: #f1f0f0; align-self: flex-start; }
+        #chatbox { overflow-y: auto; flex-grow: 1; }
+        #history-list div { cursor: pointer; color: blue; margin-bottom: 5px; }
+
+        /* Graphical background */
+        .chat-content {
+            background-image: url('background.png'); /* Replace with your actual background image URL */
+            background-size: cover;
+            background-position: center;
         }
-        .navbar {
-            background-color: #0056b3;
+
+        /* Toggle bar styling */
+        .theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 20px;
         }
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 24px;
+        .theme-toggle button {
+            margin-right: 10px;
         }
-        .chatbot-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+
+        /* Light and dark themes */
+        body.light-theme {
+            background-color: #ffffff;
+            color: black;
         }
-        #chatbox {
-            height: 400px;
-            overflow-y: auto;
-            padding: 1rem;
-            background-color: #f8f9fa;
-        }
-        .message {
-            margin-bottom: 1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            max-width: 80%;
-        }
-        .user-message {
-            background-color: #0056b3;
+        body.dark-theme {
+            background-color: #121212;
             color: white;
-            align-self: flex-end;
-            margin-left: auto;
         }
-        .bot-message {
-            background-color: #e9ecef;
-            color: #212529;
-            align-self: flex-start;
+
+        /* Tooltips and tools button */
+        .tools-btn {
+            position: relative;
         }
-        .input-group {
-            border-top: 1px solid #dee2e6;
+        .tools-tooltip {
+            display: none;
+            position: absolute;
+            left: 0;
+            bottom: 40px;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .form-control:focus {
-            box-shadow: none;
-            border-color: #0056b3;
-        }
-        .btn-primary {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-        .btn-primary:hover {
-            background-color: #003d82;
-            border-color: #003d82;
-        }
-        .toggle-container {
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-bottom: 1px solid #dee2e6;
-        }
-        .toggle-label {
-            font-weight: bold;
-            margin-right: 1rem;
-        }
-        #userTypeToggle {
-            width: 60px;
-            height: 30px;
-        }
-        .dark-mode {
-            background-color: #343a40;
-            color: #f8f9fa;
-        }
-        .dark-mode #chatbox {
-            background-color: #212529;
-        }
-        .dark-mode .bot-message {
-            background-color: #495057;
-            color: #f8f9fa;
-        }
-        .dark-mode .toggle-container {
-            background-color: #212529;
-            border-color: #495057;
+        .tools-btn:hover .tools-tooltip {
+            display: block;
         }
     </style>
 </head>
-<body>
+<body class="dark-theme"> <!-- Default is dark theme -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/">MED.ai</a>
@@ -106,12 +78,6 @@
                         <a class="nav-link" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link active" href="/chatbot">Chat Now</a>
                     </li>
                 </ul>
@@ -119,23 +85,34 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <div class="chatbot-container">
-            <div class="toggle-container d-flex justify-content-between align-items-center">
-                <span class="toggle-label">User Type:</span>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="userTypeToggle">
-                    <label class="form-check-label" for="userTypeToggle">
-                        <span id="userTypeLabel">Patient</span>
-                    </label>
-                </div>
+    <div class="chat-container">
+        <div class="chat-history">
+            <div class="chat-history-header">Chat History</div>
+            <div id="history-list"></div>
+        </div>
+        <div class="chat-content">
+            <!-- Toggle between themes -->
+            <div class="theme-toggle">
+                <button id="doctorMode" class="btn btn-outline-primary">Doctor</button>
+                <button id="userMode" class="btn btn-outline-secondary">User</button>
             </div>
+
+            <!-- Chatbox content -->
             <div id="chatbox" class="d-flex flex-column">
                 <div class="message bot-message">
                     <i class="fas fa-robot me-2"></i>How can I assist you today?
                 </div>
             </div>
-            <div class="input-group">
+
+            <!-- Input and tools -->
+            <div class="input-group mt-3">
+                <div class="tools-btn">
+                    <button class="btn btn-outline-secondary" id="toolsButton">Tools</button>
+                    <div class="tools-tooltip">
+                        <p>Ocular Scan</p>
+                        <p>X-ray Diagnosis</p>
+                    </div>
+                </div>
                 <input type="text" id="messageInput" class="form-control" placeholder="Type your message...">
                 <button class="btn btn-primary" type="button" id="sendMessage">
                     <i class="fas fa-paper-plane me-2"></i>Send
@@ -149,24 +126,67 @@
         const chatbox = document.getElementById('chatbox');
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendMessage');
-        const userTypeToggle = document.getElementById('userTypeToggle');
-        const userTypeLabel = document.getElementById('userTypeLabel');
+        const historyList = document.getElementById('history-list');
+        const toolsButton = document.getElementById('toolsButton');
+        const doctorMode = document.getElementById('doctorMode');
+        const userMode = document.getElementById('userMode');
+        let currentSession = [];
+        let sessionId;
 
+        // Initialize or load sessions
+        function initializeSession() {
+            const storedSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
+            sessionId = storedSessions.length + 1; // Start a new session
+            displayChatHistory(storedSessions);
+        }
+
+        // Save current chat session on page unload
+        function saveCurrentSession() {
+            const storedSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
+            storedSessions.push({ id: `Chat ${sessionId}`, messages: currentSession });
+            localStorage.setItem('chatSessions', JSON.stringify(storedSessions));
+        }
+
+        // Display chat history from previous sessions
+        function displayChatHistory(sessions) {
+            historyList.innerHTML = '';
+            sessions.forEach((session) => {
+                const historyItem = document.createElement('div');
+                historyItem.textContent = session.id;
+                historyItem.classList.add('history-item');
+                historyItem.addEventListener('click', () => loadChatHistory(session.messages));
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        // Load a previous chat session
+        function loadChatHistory(messages) {
+            chatbox.innerHTML = ''; // Clear current chatbox
+            messages.forEach(msg => addMessage(msg.content, msg.isUser)); // Load previous messages
+        }
+
+        // Add message to chatbox and current session
         function addMessage(content, isUser) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
             messageDiv.innerHTML = isUser ? content : `<i class="fas fa-robot me-2"></i>${content}`;
             chatbox.appendChild(messageDiv);
             chatbox.scrollTop = chatbox.scrollHeight;
+
+            // Save message in current session
+            currentSession.push({ content, isUser });
         }
 
+        // Handle sending user message
         async function sendMessage() {
             const message = messageInput.value.trim();
             if (!message) return;
 
+            // Add user message to chat
             addMessage(message, true);
             messageInput.value = '';
 
+            // Send message to server
             try {
                 const response = await fetch('/chatbot', {
                     method: 'POST',
@@ -181,16 +201,25 @@
             }
         }
 
+        // Theme toggle logic
+        doctorMode.addEventListener('click', () => {
+            document.body.classList.remove('dark-theme');
+            document.body.classList.add('light-theme');
+        });
+
+        userMode.addEventListener('click', () => {
+            document.body.classList.remove('light-theme');
+            document.body.classList.add('dark-theme');
+        });
+
         sendButton.addEventListener('click', sendMessage);
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
 
-        userTypeToggle.addEventListener('change', () => {
-            const isDoctor = userTypeToggle.checked;
-            userTypeLabel.textContent = isDoctor ? 'Doctor' : 'Patient';
-            document.body.classList.toggle('dark-mode', !isDoctor);
-        });
+        // When user reloads the page, save current session
+        window.onbeforeunload = saveCurrentSession;
+
+        // Initialize new session when page loads
+        window.onload = initializeSession;
     </script>
-</body>
-</html>
