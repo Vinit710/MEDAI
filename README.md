@@ -1,6 +1,5 @@
 
 
-```markdown
 # Medical Chatbot and Disease Prediction System
 
 This project is a web-based application that offers a chatbot for medical conversations and image-based disease prediction, such as ocular and skin disease predictions. The backend is built using Express.js and integrates with Gradio-hosted machine learning models to provide medical insights.
@@ -31,7 +30,6 @@ This project is a web-based application that offers a chatbot for medical conver
 ```bash
 git clone https://github.com/yourusername/medical-chatbot.git
 cd medical-chatbot
-```
 
 ### Install Dependencies
 
