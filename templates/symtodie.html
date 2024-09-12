@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symptom to Disease Prediction</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #0056b3;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+        }
+        </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">MED.ai</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/docs">Docs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/chatbot">Chat Now</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br><br><br>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Symptom to Disease Prediction</h1>
+        <form id="prediction-form" class="p-4 bg-white rounded shadow">
+            <div class="mb-3">
+                <label for="age" class="form-label">Age</label>
+                <input type="number" class="form-control" id="age" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Gender</label>
+                <select class="form-control" id="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fever</label>
+                <select class="form-control" id="fever">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cough</label>
+                <select class="form-control" id="cough">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fatigue</label>
+                <select class="form-control" id="fatigue">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Difficulty Breathing</label>
+                <select class="form-control" id="difficulty_breathing">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Blood Pressure</label>
+                <select class="form-control" id="blood_pressure">
+                    <option value="Low">Low</option>
+                    <option value="Normal">Normal</option>
+                    <option value="High">High</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cholesterol Level</label>
+                <select class="form-control" id="cholesterol_level">
+                    <option value="Low">Low</option>
+                    <option value="Normal">Normal</option>
+                    <option value="High">High</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Predict Disease</button>
+        </form>
+        <div id="result" class="mt-4 p-4 bg-success text-white rounded"></div>
+    </div>
+
+    <script>
+        $('#prediction-form').on('submit', function(event) {
+            event.preventDefault();
+            const age = $('#age').val();
+            const gender = $('#gender').val();
+            const fever = $('#fever').val();
+            const cough = $('#cough').val();
+            const fatigue = $('#fatigue').val();
+            const difficulty_breathing = $('#difficulty_breathing').val();
+            const blood_pressure = $('#blood_pressure').val();
+            const cholesterol_level = $('#cholesterol_level').val();
+
+            $.ajax({
+                url: '/predict_symtodie',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    age: age,
+                    gender: gender,
+                    fever: fever,
+                    cough: cough,
+                    fatigue: fatigue,
+                    difficulty_breathing: difficulty_breathing,
+                    blood_pressure: blood_pressure,
+                    cholesterol_level: cholesterol_level
+                }),
+                success: function(response) {
+                    $('#result').text('Predicted Disease: ' + response.prediction);
+                },
+                error: function() {
+                    $('#result').text('Error in prediction');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
