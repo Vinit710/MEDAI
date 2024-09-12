@@ -22,6 +22,9 @@ const skinClient = await Client.connect("Vinit710/Skin_Disease");
 // Initialize the Gradio client
 const chatClient = await Client.connect('peteparker456/medical_bot-llama2');
 
+// Initialize the Gradio client for the symptom-to-disease model
+const symtodieClient = await Client.connect('Vinit710/symtodise');
+
 const app = express();
 const port = 3000;
 app.use(bodyParser.json());
@@ -68,6 +71,10 @@ app.get('/skin_disease', (req, res) => {
 
 app.get('/docs', (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'docs.html'));
+});
+
+app.get('/symtodie', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'symtodie.html'));
 });
 
 // Handle image uploads and predictions for ocular
@@ -183,6 +190,36 @@ app.post('/chatbot', async (req, res) => {
   } catch (error) {
       console.error('Error communicating with the API:', error);
       res.status(500).json({ reply: "Sorry, something went wrong with the chatbot." });
+  }
+});
+
+
+// Symptom to Disease Prediction API endpoint
+app.post('/predict_symtodie', async (req, res) => {
+  try {
+      const {
+          age, gender, fever, cough, fatigue,
+          difficulty_breathing, blood_pressure, cholesterol_level
+      } = req.body;
+
+      // Make the prediction using the symptom-to-disease Gradio client
+      const result = await symtodieClient.predict('/predict', {
+          age: age,
+          gender: gender,
+          fever: fever,
+          cough: cough,
+          fatigue: fatigue,
+          difficulty_breathing: difficulty_breathing,
+          blood_pressure: blood_pressure,
+          cholesterol_level: cholesterol_level
+      });
+
+      // Return the predicted result
+      res.json({ prediction: result.data });
+
+  } catch (error) {
+      console.error('Error during symptom-to-disease prediction:', error.message);
+      res.status(500).json({ error: 'Prediction failed.' });
   }
 });
 
