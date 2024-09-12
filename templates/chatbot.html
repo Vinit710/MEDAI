@@ -1,273 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MED.ai Chatbot</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <style>
-        body { 
-            background-color: #f0f0f0; 
-            font-family: Arial, sans-serif;
-        }
-        .chat-container { 
-            display: flex; 
-            height: calc(100vh - 56px);
-            margin-top: 56px;
-        }
-        .chat-history { 
-            flex: 0 0 20%; 
-            background-color: #ffffff; 
-            border-right: 1px solid #ccc; 
-            padding: 20px; 
-            display: flex;
-            flex-direction: column;
-        }
-        .chat-history-header { 
-            font-weight: bold; 
-            margin-bottom: 20px; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .chat-content { 
-            flex: 1; 
-            padding: 20px; 
-            background-color: #fefefe; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            position: relative;
-            overflow: hidden;
-        }
-        .chat-content::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px;
-            height: 300px;
-            background-image: url('/api/placeholder/300/300');
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.1;
-            pointer-events: none;
-        }
-        .message { 
-            margin-bottom: 10px; 
-            padding: 10px; 
-            border-radius: 10px; 
-            max-width: 70%;
-            z-index: 1;
-        }
-        .user-message { 
-            background-color: #007bff; 
-            color: white; 
-            align-self: flex-end; 
-        }
-        .bot-message { 
-            background-color: #f1f0f0; 
-            align-self: flex-start; 
-        }
-        #chatbox { 
-            overflow-y: auto; 
-            flex-grow: 1; 
-            padding: 20px;
-        }
-        #history-list {
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-        #history-list div { 
-            cursor: pointer; 
-            color: #007bff; 
-            margin-bottom: 10px; 
-            padding: 5px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        #history-list div:hover {
-            background-color: #e9ecef;
-        }
-        .toggle-container {
-            margin-bottom: 10px;
-        }
-        .tools-container {
-            display: none;
-            margin-bottom: 10px;
-        }
-        .model-info {
-            margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px solid #ccc;
-            font-size: 0.8em;
-            color: #6c757d;
-        }
+      body {
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+      }
+      .chat-container {
+        display: flex;
+        height: calc(100vh - 56px);
+        margin-top: 56px;
+      }
+      .chat-history {
+        flex: 0 0 20%;
+        background-color: #ffffff;
+        border-right: 1px solid #ccc;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .chat-history-header {
+        font-weight: bold;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .chat-content {
+        flex: 1;
+        padding: 20px;
+        background-color: #fefefe;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+      }
+      .chat-content::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 300px;
+        background-image: url("/api/placeholder/300/300");
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0.1;
+        pointer-events: none;
+      }
+      .message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        max-width: 70%;
+        z-index: 1;
+      }
+      .user-message {
+        background-color: #007bff;
+        color: white;
+        align-self: flex-end;
+      }
+      .bot-message {
+        background-color: #f1f0f0;
+        align-self: flex-start;
+      }
+      #chatbox {
+        overflow-y: auto;
+        flex-grow: 1;
+        padding: 20px;
+      }
+      #history-list {
+        overflow-y: auto;
+        flex-grow: 1;
+      }
+      #history-list div {
+        cursor: pointer;
+        color: #007bff;
+        margin-bottom: 10px;
+        padding: 5px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+      #history-list div:hover {
+        background-color: #e9ecef;
+      }
+      .toggle-container {
+        margin-bottom: 10px;
+      }
+      .tools-container {
+        display: none;
+        margin-bottom: 10px;
+      }
+      .model-info {
+        margin-top: auto;
+        padding-top: 10px;
+        border-top: 1px solid #ccc;
+        font-size: 0.8em;
+        color: #6c757d;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">MED.ai</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/chatbot">Chat Now</a>
-                    </li>
-                </ul>
-            </div>
+      <div class="container">
+        <a class="navbar-brand" href="/">MED.ai</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/chatbot">Chat Now</a>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
 
     <div class="chat-container">
-        <div class="chat-history">
-            <div class="chat-history-header">
-                <span>Chat History</span>
-                <button class="btn btn-sm btn-outline-danger" id="clearHistory">Clear</button>
-            </div>
-            <div id="history-list"></div>
-            <div class="model-info">
-                Current model: Llama 3.0-custom
-            </div>
+      <div class="chat-history">
+        <div class="chat-history-header">
+          <span>Chat History</span>
+          <button class="btn btn-sm btn-outline-danger" id="clearHistory">
+            Clear
+          </button>
         </div>
-        <div class="chat-content">
-            <div class="toggle-container">
-                <div class="btn-group" role="group" aria-label="User type toggle">
-                    <input type="radio" class="btn-check" name="userType" id="userBtn" autocomplete="off" checked>
-                    <label class="btn btn-outline-primary" for="userBtn">User</label>
-                    <input type="radio" class="btn-check" name="userType" id="doctorBtn" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="doctorBtn">Doctor</label>
-                </div>
-            </div>
-            <div id="chatbox" class="d-flex flex-column">
-                <div class="message bot-message">
-                    <i class="fas fa-robot me-2"></i>How can I assist you today?
-                </div>
-            </div>
-            <div class="tools-container">
-                <div class="btn-group" role="group" aria-label="Doctor Tools">
-                    <a href="/ocular" class="btn btn-outline-secondary">Ocular Scan</a>
-                    <a href="/skin_disease" class="btn btn-outline-secondary">Skin Scan</a>
-                    <a href="/other-tools" class="btn btn-outline-secondary">Other Tools</a>
-                </div>
-            </div>
-            <div class="input-group mt-3">
-                <input type="text" id="messageInput" class="form-control" placeholder="Type your message...">
-                <button class="btn btn-primary" type="button" id="sendMessage">
-                    <i class="fas fa-paper-plane me-2"></i>Send
-                </button>
-            </div>
+        <div id="history-list"></div>
+        <div class="model-info">Current model: Llama 3.0-custom</div>
+      </div>
+      <div class="chat-content">
+        <div class="toggle-container">
+          <div class="btn-group" role="group" aria-label="User type toggle">
+            <input
+              type="radio"
+              class="btn-check"
+              name="userType"
+              id="userBtn"
+              autocomplete="off"
+              checked
+            />
+            <label class="btn btn-outline-primary" for="userBtn">User</label>
+            <input
+              type="radio"
+              class="btn-check"
+              name="userType"
+              id="doctorBtn"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-primary" for="doctorBtn"
+              >Doctor</label
+            >
+          </div>
         </div>
+        <div id="chatbox" class="d-flex flex-column">
+          <div class="message bot-message">
+            <i class="fas fa-robot me-2"></i>How can I assist you today?
+          </div>
+        </div>
+        <div class="tools-container">
+          <div class="btn-group" role="group" aria-label="Doctor Tools">
+            <a href="/ocular" class="btn btn-outline-secondary">Ocular Scan</a>
+            <a href="/skin_disease" class="btn btn-outline-secondary"
+              >Skin Scan</a
+            >
+            <a href="/other-tools" class="btn btn-outline-secondary"
+              >Other Tools</a
+            >
+          </div>
+        </div>
+        <div class="input-group mt-3">
+          <input
+            type="text"
+            id="messageInput"
+            class="form-control"
+            placeholder="Type your message..."
+          />
+          <button class="btn btn-primary" type="button" id="sendMessage">
+            <i class="fas fa-paper-plane me-2"></i>Send
+          </button>
+        </div>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const chatbox = document.getElementById('chatbox');
-        const messageInput = document.getElementById('messageInput');
-        const sendButton = document.getElementById('sendMessage');
-        const historyList = document.getElementById('history-list');
-        const clearHistoryButton = document.getElementById('clearHistory');
-        const userTypeToggle = document.querySelectorAll('input[name="userType"]');
-        const toolsContainer = document.querySelector('.tools-container');
-        let currentSession = [];
-        let sessionId;
+      const chatbox = document.getElementById("chatbox");
+      const messageInput = document.getElementById("messageInput");
+      const sendButton = document.getElementById("sendMessage");
+      const historyList = document.getElementById("history-list");
+      const clearHistoryButton = document.getElementById("clearHistory");
+      const userTypeToggle = document.querySelectorAll(
+        'input[name="userType"]'
+      );
+      const toolsContainer = document.querySelector(".tools-container");
+      let currentSession = [];
+      let sessionId;
 
-        function initializeSession() {
-            const storedSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
-            sessionId = storedSessions.length + 1;
-            displayChatHistory(storedSessions);
-        }
+      function initializeSession() {
+        const storedSessions =
+          JSON.parse(localStorage.getItem("chatSessions")) || [];
+        sessionId = storedSessions.length + 1;
+        displayChatHistory(storedSessions);
+      }
 
-        function saveCurrentSession() {
-            const storedSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
-            storedSessions.push({ id: `Chat ${sessionId}`, messages: currentSession });
-            localStorage.setItem('chatSessions', JSON.stringify(storedSessions));
-        }
-
-        function displayChatHistory(sessions) {
-            historyList.innerHTML = '';
-            sessions.forEach((session) => {
-                const historyItem = document.createElement('div');
-                historyItem.textContent = session.id;
-                historyItem.classList.add('history-item');
-                historyItem.addEventListener('click', () => loadChatHistory(session.messages));
-                historyList.appendChild(historyItem);
-            });
-        }
-
-        function loadChatHistory(messages) {
-            chatbox.innerHTML = '';
-            messages.forEach(msg => addMessage(msg.content, msg.isUser));
-        }
-
-        function addMessage(content, isUser) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
-            messageDiv.innerHTML = isUser ? content : `<i class="fas fa-robot me-2"></i>${content}`;
-            chatbox.appendChild(messageDiv);
-            chatbox.scrollTop = chatbox.scrollHeight;
-            currentSession.push({ content, isUser });
-        }
-
-        async function sendMessage() {
-            const message = messageInput.value.trim();
-            if (!message) return;
-
-            addMessage(message, true);
-            messageInput.value = '';
-
-            try {
-                const response = await fetch('/chatbot', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message })
-                });
-                const data = await response.json();
-                addMessage(data.reply, false);
-            } catch (error) {
-                console.error('Error:', error);
-                addMessage('Sorry, there was an error processing your request.', false);
-            }
-        }
-
-        sendButton.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
+      function saveCurrentSession() {
+        const storedSessions =
+          JSON.parse(localStorage.getItem("chatSessions")) || [];
+        storedSessions.push({
+          id: `Chat ${sessionId}`,
+          messages: currentSession,
         });
+        localStorage.setItem("chatSessions", JSON.stringify(storedSessions));
+      }
 
-        clearHistoryButton.addEventListener('click', () => {
-            localStorage.removeItem('chatSessions');
-            historyList.innerHTML = '';
-            currentSession = [];
-            chatbox.innerHTML = '<div class="message bot-message"><i class="fas fa-robot me-2"></i>Chat history cleared. How can I assist you?</div>';
+      function displayChatHistory(sessions) {
+        historyList.innerHTML = "";
+        sessions.forEach((session) => {
+          const historyItem = document.createElement("div");
+          historyItem.textContent = session.id;
+          historyItem.classList.add("history-item");
+          historyItem.addEventListener("click", () =>
+            loadChatHistory(session.messages)
+          );
+          historyList.appendChild(historyItem);
         });
+      }
 
-        userTypeToggle.forEach((radio) => {
-            radio.addEventListener('change', (e) => {
-                if (e.target.id === 'doctorBtn') {
-                    toolsContainer.style.display = 'block';
-                } else {
-                    toolsContainer.style.display = 'none';
-                }
-            });
+      function loadChatHistory(messages) {
+        chatbox.innerHTML = "";
+        messages.forEach((msg) => addMessage(msg.content, msg.isUser));
+      }
+
+      function addMessage(content, isUser) {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add(
+          "message",
+          isUser ? "user-message" : "bot-message"
+        );
+        messageDiv.innerHTML = isUser
+          ? content
+          : `<i class="fas fa-robot me-2"></i>${content}`;
+        chatbox.appendChild(messageDiv);
+        chatbox.scrollTop = chatbox.scrollHeight;
+        currentSession.push({ content, isUser });
+      }
+
+      async function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        addMessage(message, true);
+        messageInput.value = "";
+
+        try {
+          const response = await fetch("/chatbot", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message }),
+          });
+          const data = await response.json();
+          addMessage(data.reply, false);
+        } catch (error) {
+          console.error("Error:", error);
+          addMessage(
+            "Sorry, there was an error processing your request.",
+            false
+          );
+        }
+      }
+
+      sendButton.addEventListener("click", sendMessage);
+      messageInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+      });
+
+      clearHistoryButton.addEventListener("click", () => {
+        localStorage.removeItem("chatSessions");
+        historyList.innerHTML = "";
+        currentSession = [];
+        chatbox.innerHTML =
+          '<div class="message bot-message"><i class="fas fa-robot me-2"></i>Chat history cleared. How can I assist you?</div>';
+      });
+
+      userTypeToggle.forEach((radio) => {
+        radio.addEventListener("change", (e) => {
+          if (e.target.id === "doctorBtn") {
+            toolsContainer.style.display = "block";
+          } else {
+            toolsContainer.style.display = "none";
+          }
         });
+      });
 
-        window.onbeforeunload = saveCurrentSession;
-        window.onload = initializeSession;
+      window.onbeforeunload = saveCurrentSession;
+      window.onload = initializeSession;
     </script>
-</body>
+  </body>
 </html>
