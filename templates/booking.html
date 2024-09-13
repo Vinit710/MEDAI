@@ -34,6 +34,28 @@
       .booking-btn:hover {
         background-color: #45a049;
       }
+      #appointment-form {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        z-index: 1000;
+      }
+      #overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
     </style>
     <link
       rel="stylesheet"
@@ -46,6 +68,24 @@
     <div id="map"></div>
     <ul id="hospital-list"></ul>
 
+    <!-- Overlay for form -->
+    <div id="overlay"></div>
+
+    <!-- Appointment form -->
+    <div id="appointment-form">
+      <h3>Book Appointment</h3>
+      <form id="bookForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required /><br />
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" required /><br />
+        <label for="email">Email:</label>
+        <input type="email" id="email" required /><br />
+        <button type="submit">Book Appointment</button>
+        <button type="button" onclick="closeForm()">Cancel</button>
+      </form>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
       // Map initialization
@@ -57,6 +97,7 @@
       }).addTo(map);
 
       let marker;
+      let selectedHospital;
 
       function getCurrentLocation() {
         if (navigator.geolocation) {
@@ -122,10 +163,76 @@
           .catch((error) => console.error('Error fetching hospital data:', error));
       }
 
-      function bookAppointment(name) {
-        // Placeholder for booking functionality - open booking form or redirect to a booking page
-        alert(`Booking appointment with ${name}`);
+      function bookAppointment(hospitalName) {
+        selectedHospital = hospitalName;
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('appointment-form').style.display = 'block';
       }
+
+      function closeForm() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('appointment-form').style.display = 'none';
+      }
+
+      // Handle form submission
+      document.getElementById('bookForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+
+        closeForm();
+
+        // Show a confirmation message
+        alert('Appointment will be booked in a few minutes.');
+
+          // Send the appointment details to the backend
+  fetch('http://localhost:3000/sendEmail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: name,
+      phone: phone,
+      email: email,
+      hospital: selectedHospital,
+      date: new Date().toLocaleString(),
+    }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('Email sent successfully!');
+      } else {
+        console.error('Failed to send email:', data.message);
+      }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+
+        // Call the backend API to send an email (implement this part in your server)
+        // Example API call (you will need a backend service to handle this)
+        /*
+        fetch('/sendEmail', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name,
+            phone: phone,
+            email: email,
+            hospital: selectedHospital,
+            date: new Date().toLocaleString(),
+          }),
+        })
+          .then(response => response.json())
+          .then(data => console.log('Email sent:', data))
+          .catch(error => console.error('Error:', error));
+        */
+      
     </script>
   </body>
 </html>
