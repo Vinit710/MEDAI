@@ -77,6 +77,10 @@ app.get('/symtodie', (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'symtodie.html'));
 });
 
+app.get('/booking', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'booking.html'));
+});
+
 // Handle image uploads and predictions for ocular
 app.post('/predict', upload.fields([{ name: 'left_image' }, { name: 'right_image' }]), async (req, res) => {
   try {
