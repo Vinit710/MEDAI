@@ -5,6 +5,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { Client } from '@gradio/client';
 import bodyParser from 'body-parser';
+import nodemailer from 'nodemailer';
 
 // Define __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -227,6 +228,40 @@ app.post('/predict_symtodie', async (req, res) => {
   }
 });
 
+
+// Endpoint to handle email sending
+app.post('/sendEmail', async (req, res) => {
+  const { name, phone, email, hospital, date } = req.body;
+
+  // Set up transporter for Nodemailer (using Gmail as an example)
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    secure: true,
+    port: 465,
+    auth: {
+      user: 'med.ai.services.pvt@gmail.com', // replace with your email
+      pass: 'lbynfuyroyherynf', // replace with your email password or app password
+    },
+  });
+
+  // Define the email options
+  const mailOptions = {
+    from: 'med.ai.services.pvt@gmail.com',
+    to: email, // Send to the user's email
+    subject: 'Appointment Confirmation',
+    text: `Dear ${name},\n\nYour appointment has been booked at ${hospital}.\n\nDate and Time: ${date}\n\nThank you for using our service.\n\nPhone: ${phone}`,
+  };
+
+  try {
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent:', info.response);
+    res.status(200).json({ success: true, message: 'Email sent successfully!' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ success: false, message: 'Failed to send email' });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
