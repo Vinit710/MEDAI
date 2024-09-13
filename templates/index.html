@@ -36,21 +36,6 @@
             margin-bottom: 1rem;
             color: #0056b3;
         }
-        .chatbot-container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-top: 50px;
-        }
-        #chatbox {
-            height: 300px;
-            overflow-y: auto;
-            border: 1px solid #e0e0e0;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #f8f9fa;
-        }
         .btn-primary {
             background-color: #0056b3;
             border-color: #0056b3;
@@ -73,6 +58,50 @@
             padding: 20px 0;
             margin-top: 50px;
         }
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .feature-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .feature-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+            display: flex;
+            align-items: center;
+        }
+        .feature-text {
+            flex: 70%;
+            padding-right: 30px;
+        }
+        .feature-image {
+            flex: 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .circular-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .png-image {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -87,10 +116,10 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/">Home</a>
                     </li>
-                    <li class="nav-item"></li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/docs">Docs</a>
                     </li>
-                    <li class="nav-item"></li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/booking">Book Appointment</a>
                     </li>
                     <li class="nav-item">
@@ -99,7 +128,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/contact">Contact</a>
                     </li>
-                    <li class="nav-item"></li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/chatbot">Chat Now</a>
                     </li>
                 </ul>
@@ -115,21 +144,21 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="/static/images/image2.jpg" class="d-block w-100" alt="Healthcare 1">
+                <img src="/static/images/image4.jpg" class="d-block w-100" alt="Healthcare 1">
                 <div class="carousel-caption d-none d-md-block">
                     <h2>Welcome to MED.ai</h2>
                     <p>Your Smart Healthcare Assistant</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="/static/images/image1.jpg" class="d-block w-100" alt="Healthcare 2">
+                <img src="/static/images/image5.jpg" class="d-block w-100" alt="Healthcare 2">
                 <div class="carousel-caption d-none d-md-block">
                     <h2>Advanced AI Diagnostics</h2>
                     <p>Cutting-edge technology at your service</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="/static/images/image3.jpg" class="d-block w-100" alt="Healthcare 3">
+                <img src="/static/images/image6.jpg" class="d-block w-100" alt="Healthcare 3">
                 <div class="carousel-caption d-none d-md-block">
                     <h2>Connecting Doctors and Patients</h2>
                     <p>Bridging the gap in healthcare</p>
@@ -156,58 +185,65 @@
             </div>
         </div>
 
-        <div class="row mt-5">
-            <h2 class="text-center mb-4">Our Features</h2>
-            <div class="col-md-4 text-center">
-                <div class="feature-icon">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <h3>AI-Powered Diagnosis</h3>
-                <p>Utilize our advanced AI algorithms for quick and accurate medical diagnoses.</p>
+        <!-- Chatbot Information -->
+        <div class="feature-container">
+            <div class="feature-text">
+                <h2>Our Advanced AI Chatbot</h2>
+                <p>Powered by state-of-the-art technology, our chatbot is trained on 40GB of medical textbooks and fine-tuned with the LLAMA 3.0 model. Experience the future of medical assistance today!</p>
+                <a href="/chatbot" class="btn btn-primary btn-lg">Chat Now</a>
             </div>
-            <div class="col-md-4 text-center">
-                <div class="feature-icon">
-                    <i class="fas fa-user-md"></i>
-                </div>
-                <h3>Connect with Doctors</h3>
-                <p>Easily connect with qualified healthcare professionals for consultations.</p>
-            </div>
-            <div class="col-md-4 text-center">
-                <div class="feature-icon">
-                    <i class="fas fa-heartbeat"></i>
-                </div>
-                <h3>Health Monitoring</h3>
-                <p>Keep track of your vital signs and health metrics with our intelligent monitoring system.</p>
+            <div class="feature-image">
+                <img src="/static/images/chatbot.jpeg" alt="AI Chatbot" class="circular-image">
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="chatbot-container">
-                    <h2 class="text-center mb-4">Smart Healthcare Assistant</h2>
-                    <div id="chatbox" class="mb-3">
-                        <p>How can I assist you today?</p>
-                    </div>
-                    <div class="d-flex justify-content-center mb-3">
-                        <button id="doctors-btn" class="btn btn-primary me-2">
-                            <i class="fas fa-user-md me-2"></i>Doctors
-                        </button>
-                        <button id="patients-btn" class="btn btn-primary">
-                            <i class="fas fa-procedures me-2"></i>Patients
-                        </button>
-                    </div>
-                    <div id="additional-buttons" class="text-center hidden">
-                        <button onclick="window.location.href='/ocular'" class="btn btn-success me-2 mb-2">
-                            <i class="fas fa-eye me-2"></i>Ocular Scan
-                        </button>
-                        <button onclick="window.location.href='/skin_disease'" class="btn btn-success me-2 mb-2">
-                            <i class="fas fa-allergies me-2"></i>Skin Disease
-                        </button>
-                        <button class="btn btn-success mb-2">
-                            <i class="fas fa-comments me-2"></i>Talk with Other Doctors
-                        </button>
-                    </div>
+        <!-- Chatbot Features -->
+        <div class="row mt-5">
+            <h2 class="text-center mb-4">Our AI-Powered Features</h2>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="/static/images/eyescan.jpg" alt="Ocular Scan" class="feature-image">
+                    <h3>Ocular Scan</h3>
+                    <p>Scan your eye to predict diabetes and other ocular conditions with high accuracy.</p>
+                    <a href="/ocular" class="btn btn-primary">Try Now</a>
                 </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="/static/images/skinscan.jpg" alt="Skin Scan" class="feature-image">
+                    <h3>Skin Scan</h3>
+                    <p>Analyze skin conditions and get instant insights into potential dermatological issues.</p>
+                    <a href="/skin_disease" class="btn btn-primary">Try Now</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="/static/images/symtodie.png" alt="X-Ray Scan" class="feature-image">
+                    <h3>Symtom to Disease</h3>
+                    <p>Predict if you have any disease based on the symtoms.</p>
+                    <a href="/symtodie" class="btn btn-primary">Try Now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Book Appointment Section -->
+        <div class="feature-container">
+            <div class="feature-text">
+                <h2>Book Your Appointment</h2>
+                <p>Find and book appointments with nearby doctors based on your preferences. Our smart system matches you with the best healthcare professionals in your area.</p>
+                <a href="/booking" class="btn btn-primary btn-lg">Book Now</a>
+            </div>
+            <div class="feature-image">
+                <img src="/static/images/bookimg.png" alt="Book Appointment" class="png-image">
+            </div>
+        </div>
+
+        <!-- About Us Section -->
+        <div class="row mt-5">
+            <div class="col-md-8 offset-md-2 text-center">
+                <h2>About MED.ai</h2>
+                <p>MED.ai is at the forefront of AI-driven healthcare solutions. Our mission is to make quality healthcare accessible to everyone through innovative technology and expert medical knowledge.</p>
+                <a href="/about" class="btn btn-primary">Know More</a>
             </div>
         </div>
     </div>
@@ -247,20 +283,5 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const doctorsBtn = document.getElementById("doctors-btn");
-            const patientsBtn = document.getElementById("patients-btn");
-            const additionalButtons = document.getElementById("additional-buttons");
-        
-            doctorsBtn.addEventListener("click", () => {
-            additionalButtons.classList.toggle("hidden");
-            });
-        
-            patientsBtn.addEventListener("click", () => {
-            additionalButtons.classList.add("hidden");
-            });
-        });
-    </script>
 </body>
 </html>
