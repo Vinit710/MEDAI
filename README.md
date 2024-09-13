@@ -28,8 +28,8 @@ This project is a web-based application that offers a chatbot for medical conver
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/medical-chatbot.git
-cd medical-chatbot
+git clone https://github.com/Vinit710/MEDAI
+cd MEDAI
 
 ### Install Dependencies
 
@@ -40,7 +40,7 @@ npm install
 ### Start the Server
 
 ```bash
-npm start
+node server.mjs
 ```
 
 By default, the server will start on `http://localhost:3000`.
