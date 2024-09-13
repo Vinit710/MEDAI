@@ -1,6 +1,0 @@
-{
-  "browser": null,
-  "main": "../lib/node/index.js",
-  "module": "../lib/node/index.mjs",
-  "types": "../lib/node/index.d.ts"
-}
