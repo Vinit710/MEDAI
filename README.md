@@ -46,9 +46,11 @@ node server.mjs
 By default, the server will start on `http://localhost:3000`.
 
 ## Project Structure
-
 ```
 .
+├── chatbot/
+│   ├── __init__.py              # Package initializer for chatbot module
+│   ├── ocular_diabetes_prediction # Module for ocular disease prediction logic         
 ├── uploads/                     # Directory for uploaded images
 ├── templates/                   # Static HTML templates for frontend
 │   ├── index.html               # Home page
@@ -56,14 +58,20 @@ By default, the server will start on `http://localhost:3000`.
 │   ├── chatbot.html             # Chatbot page
 │   ├── ocular.html              # Ocular disease prediction page
 │   ├── skin_disease.html        # Skin disease prediction page
+│   ├── booking.html             # Appointment booking page
+│   ├── chat.html                # Chat interface page
+│   ├── symtodie.html            # Symptom-to-disease mapping page
 │   ├── contact.html             # Contact page
 │   └── docs.html                # Documentation page
 ├── static/                      # Directory for static files (CSS, JS)
-├── app.js                       # Main application file
+├── script.mjs                   # Main JavaScript module for frontend interactions
+├── script_skin.mjs              # JavaScript module for skin disease-related interactions
+├── server.mjs                   # Server-side logic (Node.js backend)
 ├── package.json                 # Project configuration and dependencies
+├── package-lock.json            # Lockfile for exact dependency versions
+├── requirements.txt             # Python package dependencies
 ├── README.md                    # Project documentation
 ```
-
 ## API Endpoints
 
 ### 1. Chatbot
