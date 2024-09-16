@@ -121,30 +121,51 @@
                     <!-- Add more info and images about the model here -->
                 `;
             } else if (model === 'skin') {
-    content = `
-        <h2>Skin Disease Model</h2>
-        <p>This model helps in diagnosing various skin conditions using image recognition based on the ResNet50 architecture.</p>
-        <img src="/static/images/skin.png" class="img-fluid" alt="Skin Disease">
-        
-        <h3>Model Information</h3>
-        <ul>
-            <li><strong>Base Model:</strong> ResNet50 (Pre-trained on ImageNet)</li>
-            <li><strong>Custom Layers:</strong> GlobalAveragePooling2D, Dense (512 units, ReLU), Output Layer with Softmax</li>
-            <li><strong>Classes:</strong> 8 skin conditions including cellulitis, impetigo, athlete's foot, etc.</li>
-            <li><strong>Callbacks:</strong> EarlyStopping and ModelCheckpoint</li>
-        </ul>
-
-        <h3>Performance Metrics</h3>
-        <p>Accuracy: 94%<br>Precision: 91%<br>Recall: 92%</p>
-
-        <h3>Training Information</h3>
-        <p>The model was trained for 12 epochs with an 80/20 train-validation split on a dataset containing skin disease images. Early stopping was applied to prevent overfitting.</p>
-        
-        <h3>Loss and Accuracy Plots</h3>
-        <img src="path/to/loss_plot.jpg" class="img-fluid" alt="Loss Plot">
-        <img src="path/to/accuracy_plot.jpg" class="img-fluid" alt="Accuracy Plot">
-    `;
-
+                content = `
+                    <h2>Skin Disease Model</h2>
+                    <p>This model helps in diagnosing various skin conditions using image recognition.</p>
+                    <img src="/static/images/skin.png" class="img-fluid" alt="Skin Disease">
+                    <h3>Dataset Information</h3>
+                    <p><strong>Dataset Link</strong>: 
+    <a href="https://www.kaggle.com/datasets/subirbiswas19/skin-disease-dataset" target="_blank">
+        Skin Disease Dataset on Kaggle
+    </a>
+</p>
+                        <ol>
+                            <li>Cellulitis</li>
+                            <li>Impetigo</li>
+                            <li>Athlete's Foot</li>
+                            <li>Nail Fungus</li>
+                            <li>Ringworm</li>
+                            <li>Cutaneous Larva Migrans</li>
+                            <li>Chickenpox</li>
+                            <li>Shingles</li>
+                        </ol>
+                    </p>
+                    <h3>Model Information</h3>
+                    <p><strong>Base Model</strong>: ResNet50 (Pre-trained on ImageNet)</p>
+                    <p><strong>Input Shape</strong>: (224, 224, 3)</p>
+                    <p><strong>Custom Layers:</strong>
+                        <ul>
+                            <li>GlobalAveragePooling2D for dimensionality reduction</li>
+                            <li>Dense layer with 512 units and ReLU activation</li>
+                            <li>Output layer with softmax activation and 8 units (one for each class)</li>
+                        </ul>
+                    </p>
+                    <h3>Model Performance</h3>
+                    <p>The model was trained using 12 epochs, with EarlyStopping and ModelCheckpoint callbacks to prevent overfitting.</p>
+                    <h4>Performance Metrics:</h4>
+                    <p>
+                        <strong>Training Accuracy:</strong> (*insert training accuracy*)<br>
+                        <strong>Validation Accuracy:</strong> (*insert validation accuracy*)<br>
+                        <strong>Training Loss:</strong> (*insert training loss*)<br>
+                        <strong>Validation Loss:</strong> (*insert validation loss*)
+                    </p>
+                    <h4>Graphical Representation</h4>
+                    <p>Below are the plots showing training and validation accuracy and loss:</p>
+                    <img src="/static/images/acc.png" class="img-fluid" alt="Training/Validation Accuracy">
+                    <img src="/static/images/loss.png" class="img-fluid" alt="Training/Validation Loss ">
+                `;
 
             } else if (model === 'heart') {
                 content = `
