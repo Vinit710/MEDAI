@@ -121,14 +121,31 @@
                     <!-- Add more info and images about the model here -->
                 `;
             } else if (model === 'skin') {
-                content = `
-                    <h2>Skin Disease Model</h2>
-                    <p>This model helps in diagnosing various skin conditions using image recognition.</p>
-                    <img src="path/to/skin_image.jpg" class="img-fluid" alt="Skin Disease">
-                    <h3>Performance Metrics</h3>
-                    <p>Accuracy: 94%<br>Precision: 91%<br>Recall: 92%</p>
-                    <!-- Add more info and images about the model here -->
-                `;
+    content = `
+        <h2>Skin Disease Model</h2>
+        <p>This model helps in diagnosing various skin conditions using image recognition based on the ResNet50 architecture.</p>
+        <img src="/static/images/skin.png" class="img-fluid" alt="Skin Disease">
+        
+        <h3>Model Information</h3>
+        <ul>
+            <li><strong>Base Model:</strong> ResNet50 (Pre-trained on ImageNet)</li>
+            <li><strong>Custom Layers:</strong> GlobalAveragePooling2D, Dense (512 units, ReLU), Output Layer with Softmax</li>
+            <li><strong>Classes:</strong> 8 skin conditions including cellulitis, impetigo, athlete's foot, etc.</li>
+            <li><strong>Callbacks:</strong> EarlyStopping and ModelCheckpoint</li>
+        </ul>
+
+        <h3>Performance Metrics</h3>
+        <p>Accuracy: 94%<br>Precision: 91%<br>Recall: 92%</p>
+
+        <h3>Training Information</h3>
+        <p>The model was trained for 12 epochs with an 80/20 train-validation split on a dataset containing skin disease images. Early stopping was applied to prevent overfitting.</p>
+        
+        <h3>Loss and Accuracy Plots</h3>
+        <img src="path/to/loss_plot.jpg" class="img-fluid" alt="Loss Plot">
+        <img src="path/to/accuracy_plot.jpg" class="img-fluid" alt="Accuracy Plot">
+    `;
+
+
             } else if (model === 'heart') {
                 content = `
                     <h2>Heart Disease Model</h2>
