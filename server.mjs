@@ -5,45 +5,30 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { Client } from '@gradio/client';
 import bodyParser from 'body-parser';
+
 import nodemailer from 'nodemailer';
 
 // Define __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Create uploads directory if it does not exist
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
-}
+// Use /tmp directory for uploads (required for Vercel's read-only filesystem)
+const upload = multer({ dest: '/tmp/' });
 
-// Initialize the Gradio client
+// Initialize Gradio clients
 const client = await Client.connect("Vinit710/GMED");  // Replace with your actual Gradio app
-const skinClient = await Client.connect("Vinit710/Skin_Disease"); 
-// Initialize the Gradio client
+const skinClient = await Client.connect("Vinit710/Skin_Disease");
 const chatClient = await Client.connect('peteparker456/medical_bot-llama2');
-
-// Initialize the Gradio client for the symptom-to-disease model
 const symtodieClient = await Client.connect('Vinit710/symtodise');
 
 const app = express();
 const port = 3000;
+
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// Set up multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);  // Save files to the uploads directory
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
-});
-const upload = multer({ storage: storage });
-
 // Serve static files
-app.use('/static', express.static(path.join(__dirname, 'static')))
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
 // Serve the index.html file
 app.get('/', (req, res) => {
@@ -170,13 +155,12 @@ app.post('/predict_skin', upload.single('input_image'), async (req, res) => {
     // Return an error response
     res.status(500).json({ error: 'Prediction failed. ' + error.message });
   } finally {
-    // Clean up the uploaded image file
+    // Clean up the uploaded image file from /tmp
     if (fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);  // Ensure the file is deleted even in case of errors
     }
   }
 });
-
 app.post('/chatbot', async (req, res) => {
   const userMessage = req.body.message;
 
