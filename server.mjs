@@ -18,7 +18,7 @@ const upload = multer({ dest: '/tmp/' });
 // Initialize Gradio clients
 const client = await Client.connect("Vinit710/GMED");  // Replace with your actual Gradio app
 const skinClient = await Client.connect("Vinit710/Skin_Disease");
-const chatClient = await Client.connect('peteparker456/medical_bot-llama2');
+const chatClient = await Client.connect("Vinit710/Chatbot");
 const symtodieClient = await Client.connect('Vinit710/symtodise');
 
 const app = express();
