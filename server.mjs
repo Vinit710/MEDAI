@@ -19,11 +19,8 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Initialize the Gradio client
 const client = await Client.connect("Vinit710/GMED");  // Replace with your actual Gradio app
-const skinClient = await Client.connect("Vinit710/Skin_Disease"); 
-// Initialize the Gradio client
+const skinClient = await Client.connect("Vinit710/Skin_Disease");
 const chatClient = await Client.connect("Vinit710/Chatbot");
-
-// Initialize the Gradio client for the symptom-to-disease model
 const symtodieClient = await Client.connect('Vinit710/symtodise');
 // Connect to the Hugging Face model via Gradio Client
 const xrayClient = await Client.connect("darksoule26/fracture");
