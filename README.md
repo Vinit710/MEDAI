@@ -61,12 +61,11 @@ By default, the server will start on `http://localhost:3000`.
 │   ├── booking.html             # Appointment booking page
 │   ├── chat.html                # Chat interface page
 │   ├── symtodie.html            # Symptom-to-disease mapping page
+|   |-- xray.html                # x ray model page
 │   ├── contact.html             # Contact page
 │   └── docs.html                # Documentation page
 ├── static/                      # Directory for static files (CSS, JS)
-├── script.mjs                   # Main JavaScript module for frontend interactions
-├── script_skin.mjs              # JavaScript module for skin disease-related interactions
-├── server.mjs                   # Server-side logic (Node.js backend)
+├── server.mjs                   # Server-side logic (Node.js backend and API's)
 ├── package.json                 # Project configuration and dependencies
 ├── package-lock.json            # Lockfile for exact dependency versions
 ├── requirements.txt             # Python package dependencies
@@ -92,6 +91,24 @@ By default, the server will start on `http://localhost:3000`.
 ## Deployment
 
 You can deploy this project to any Node.js hosting platform such as Heroku, DigitalOcean, or Vercel.
+
+## Screenshots
+
+Here are some screenshots of the application:
+
+1. **Chatbot Interface**  
+   ![Chatbot Interface](https://drive.google.com/uc?id=1OCZkNqKwDkdNl-CaBOO_7sZ_8cMr69ks)
+
+2. **Ocular Disease Prediction Page**  
+   ![Ocular Disease Prediction](https://drive.google.com/uc?id=1GROBxU-LvlVnXsbJknvTqneQoK2TY2V_)
+
+3. **Home Page**  
+   ![Home_1](https://drive.google.com/uc?id=1Umm7fA0jQlYrgCfwFps9ggW5-NwdmdsQ)
+
+4. **Home page**  
+   ![Home_2](https://drive.google.com/uc?id=1c-fN0kizbbkMWOUgtGDQ76nt36UPVgVP)
+
+
 
 ### Deploy to Heroku
 

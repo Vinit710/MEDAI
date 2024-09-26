@@ -5,30 +5,47 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { Client } from '@gradio/client';
 import bodyParser from 'body-parser';
-
 import nodemailer from 'nodemailer';
 
 // Define __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Use /tmp directory for uploads (required for Vercel's read-only filesystem)
-const upload = multer({ dest: '/tmp/' });
+// Create uploads directory if it does not exist
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
 
-// Initialize Gradio clients
+// Initialize the Gradio client
 const client = await Client.connect("Vinit710/GMED");  // Replace with your actual Gradio app
-const skinClient = await Client.connect("Vinit710/Skin_Disease");
-const chatClient = await Client.connect('peteparker456/medical_bot-llama2');
+const skinClient = await Client.connect("Vinit710/Skin_Disease"); 
+// Initialize the Gradio client
+const chatClient = await Client.connect("Vinit710/Chatbot");
+
+// Initialize the Gradio client for the symptom-to-disease model
 const symtodieClient = await Client.connect('Vinit710/symtodise');
+// Connect to the Hugging Face model via Gradio Client
+const xrayClient = await Client.connect("darksoule26/fracture");
 
 const app = express();
 const port = 3000;
-
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
+// Set up multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);  // Save files to the uploads directory
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage: storage });
+
 // Serve static files
-app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use('/static', express.static(path.join(__dirname, 'static')))
 
 // Serve the index.html file
 app.get('/', (req, res) => {
@@ -65,6 +82,10 @@ app.get('/symtodie', (req, res) => {
 
 app.get('/booking', (req, res) => {
   res.sendFile(path.join(__dirname, 'templates', 'booking.html'));
+});
+
+app.get('/xray', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'xray.html'));
 });
 
 // Handle image uploads and predictions for ocular
@@ -155,12 +176,13 @@ app.post('/predict_skin', upload.single('input_image'), async (req, res) => {
     // Return an error response
     res.status(500).json({ error: 'Prediction failed. ' + error.message });
   } finally {
-    // Clean up the uploaded image file from /tmp
+    // Clean up the uploaded image file
     if (fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);  // Ensure the file is deleted even in case of errors
     }
   }
 });
+
 app.post('/chatbot', async (req, res) => {
   const userMessage = req.body.message;
 
@@ -209,6 +231,39 @@ app.post('/predict_symtodie', async (req, res) => {
   } catch (error) {
       console.error('Error during symptom-to-disease prediction:', error.message);
       res.status(500).json({ error: 'Prediction failed.' });
+  }
+});
+
+// Handle X-ray image upload and prediction
+app.post('/predict_xray', upload.single('input_image'), async (req, res) => {
+  try {
+    const imagePath = req.file.path;
+    console.log(`Uploaded X-ray image path: ${imagePath}`);
+
+    // Read the image as a Blob
+    const imageBuffer = fs.readFileSync(imagePath);
+    const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });  // Set correct MIME type
+
+    // Make the prediction call to the Hugging Face API
+    const result = await xrayClient.predict("/predict", {
+      img: imageBlob  // Use the Blob format as required by the API
+    });
+
+    console.log('Prediction result:', result);
+
+    // Extract the prediction text from the API response
+    const prediction = result.data[0];
+
+    // Return the prediction result as JSON
+    res.status(200).json({ prediction });
+  } catch (error) {
+    console.error('Error during prediction:', error.message);
+    res.status(500).json({ error: 'Prediction failed. ' + error.message });
+  } finally {
+    // Clean up the uploaded image file
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
   }
 });
 

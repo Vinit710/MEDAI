@@ -55,6 +55,9 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link active" href="/docs">Docs</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/booking">Book Appointment</a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
                     <li class="nav-item"><a class="nav-link" href="/chatbot">Chat Now</a></li>
@@ -70,9 +73,10 @@
             <nav class="col-md-2 sidebar">
                 <h5>MODELS</h5>
                 <a href="#" onclick="showModelInfo('ocular')">Ocular Scan Model</a>
-                <a href="#" onclick="showModelInfo('xray')">X-Ray Scan Model</a>
+                <a href="#" onclick="showModelInfo('nlp')">Medical Chatbot Using LLaMA 2.0</a>
                 <a href="#" onclick="showModelInfo('skin')">Skin Disease Model</a>
-                <a href="#" onclick="showModelInfo('heart')">Heart Disease Model</a>
+                <a href="#" onclick="showModelInfo('sym')">Symtom to disease prediction model</a>
+                <a href="#" onclick="showModelInfo('xray')">X-ray Diagnosis model</a>
                 <!-- Add more models here -->
             </nav>
 
@@ -105,20 +109,258 @@
             if (model === 'ocular') {
                 content = `
                     <h2>Ocular Scan Model</h2>
-                    <p>This model assists in diagnosing eye conditions based on retinal scans.</p>
-                    <img src="path/to/ocular_image.jpg" class="img-fluid" alt="Ocular Scan">
-                    <h3>Performance Metrics</h3>
-                    <p>Accuracy: 95%<br>Precision: 92%<br>Recall: 93%</p>
-                    <!-- Add more info and images about the model here -->
+                    <h1>Ocular Disease Recognition Model Documentation</h1>
+
+    <p>This documentation provides an overview of the code used to develop an ocular disease recognition model. The model is built using TensorFlow and Keras, and it classifies ocular diseases based on fundus images of the left and right eyes. The dataset used for this project is the <strong>ODIR-5K</strong> dataset, which contains labeled ocular fundus images.</p>
+
+    <h2>Model Overview</h2>
+    <p>The model is a convolutional neural network (CNN) designed to classify images into multiple ocular disease categories. These categories include:</p>
+    <ul>
+        <li>Normal (N)</li>
+        <li>Diabetes (D)</li>
+        <li>Glaucoma (G)</li>
+        <li>Cataract (C)</li>
+        <li>Age-related Macular Degeneration (A)</li>
+        <li>Hypertension (H)</li>
+        <li>Pathological Myopia (M)</li>
+        <li>Other Diseases/Abnormalities (O)</li>
+    </ul>
+
+    <h2>Dataset Preparation</h2>
+    <p>The dataset consists of fundus images for both the left and right eyes, along with corresponding labels for each image. The labels are one-hot encoded into multiple categories to represent the presence of multiple diseases.</p>
+
+    <pre><code># Define image size and paths
+IMG_SIZE = 128
+train_dir = '/kaggle/input/ocular-disease-recognition-odir5k/ODIR-5K/ODIR-5K/Training Images'
+test_dir = '/kaggle/input/ocular-disease-recognition-odir5k/ODIR-5K/ODIR-5K/Testing Images'
+
+# Load CSV file containing labels and image paths
+labels_df = pd.read_csv('/kaggle/input/ocular-disease-recognition-odir5k/full_df.csv')
+
+# Prepare image paths and labels
+labels_df['Left-Fundus'] = labels_df['ID'].astype(str) + '_left.jpg'
+labels_df['Right-Fundus'] = labels_df['ID'].astype(str) + '_right.jpg'
+y = labels_df[['N', 'D', 'G', 'C', 'A', 'H', 'M', 'O']].values</code></pre>
+
+    <h2>Data Generator</h2>
+    <p>A custom data generator is used to load and preprocess images in batches. This improves memory efficiency during model training.</p>
+
+    <pre><code>class DataGenerator(Sequence):
+    def __init__(self, image_paths, labels, batch_size=32, img_size=IMG_SIZE, shuffle=True):
+        self.image_paths = image_paths
+        self.labels = labels
+        self.batch_size = batch_size
+        self.img_size = img_size
+        self.shuffle = shuffle
+        self.on_epoch_end()
+
+    def __len__(self):
+        return int(np.floor(len(self.image_paths) / self.batch_size))
+
+    def __getitem__(self, index):
+        batch_paths = self.image_paths[index * self.batch_size:(index + 1) * self.batch_size]
+        batch_labels = self.labels[index * self.batch_size:(index + 1) * self.batch_size]
+        images = self.__load_images(batch_paths)
+        return np.array(images), np.array(batch_labels)
+
+    def __load_images(self, image_paths):
+        images = []
+        for path in image_paths:
+            img = cv2.imread(path)
+            img = cv2.resize(img, (self.img_size, self.img_size))
+            images.append(img / 255.0)  # Normalize images
+        return images</code></pre>
+
+    <h2>Model Architecture</h2>
+    <p>The model architecture is a Convolutional Neural Network (CNN) with the following layers:</p>
+    <ul>
+        <li>Conv2D layers with ReLU activation</li>
+        <li>MaxPooling2D layers</li>
+        <li>Fully connected Dense layers</li>
+        <li>Dropout layer for regularization</li>
+        <li>Output layer with Sigmoid activation for multi-label classification</li>
+    </ul>
+
+    <pre><code>inputs = Input(shape=(IMG_SIZE, IMG_SIZE, 3))
+x = Conv2D(32, (3, 3), activation='relu')(inputs)
+x = MaxPooling2D((2, 2))(x)
+x = Conv2D(64, (3, 3), activation='relu')(x)
+x = MaxPooling2D((2, 2))(x)
+x = Conv2D(128, (3, 3), activation='relu')(x)
+x = MaxPooling2D((2, 2))(x)
+x = Flatten()(x)
+x = Dense(128, activation='relu')(x)
+x = Dropout(0.5)(x)
+outputs = Dense(8, activation='sigmoid')(x)
+
+model = Model(inputs, outputs)
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+model.summary()</code></pre>
+<img src="/static/images/ocular.jpg" class="img-fluid" alt="Ocular Scan">
+
+    <h2>Training the Model</h2>
+    <p>The model is trained using the Adam optimizer and binary cross-entropy loss, which is suitable for multi-label classification problems. The training process involves using the training and validation datasets created from the data generators.</p>
+
+    <pre><code>history = model.fit(
+    train_generator,
+    validation_data=val_generator,
+    epochs=10,
+    verbose=1
+)</code></pre>
+
+    <h2>Model Evaluation</h2>
+    <p>After training, the model is evaluated on the validation dataset to assess its performance. The accuracy and loss are printed for validation data.</p>
+
+    <pre><code>val_loss, val_acc = model.evaluate(val_generator)
+print(f"Validation Accuracy: {val_acc:.2f}")</code></pre>
+<img src="/static/images/ocular_graph.jpg" class="img-fluid" alt="Ocular Scan">
+
+    <h2>Prediction Function</h2>
+    <p>A custom prediction function is defined to load new images, preprocess them, and make predictions for ocular diseases based on left and right fundus images. The predictions are averaged for both eyes, and the results are returned as a dictionary of disease labels and corresponding probabilities.</p>
+
+    <pre><code>def predict_diseases(left_image_path, right_image_path, model, img_size=IMG_SIZE):
+    left_img = preprocess_image(left_image_path, img_size)
+    right_img = preprocess_image(right_image_path, img_size)
+    left_predictions = model.predict(left_img)
+    right_predictions = model.predict(right_img)
+    combined_predictions = (left_predictions + right_predictions) / 2
+    labels = ['Normal (N)', 'Diabetes (D)', 'Glaucoma (G)', 'Cataract (C)',
+              'Age-related Macular Degeneration (A)', 'Hypertension (H)',
+              'Pathological Myopia (M)', 'Other diseases/abnormalities (O)']
+    pred_labels = {label: pred for label, pred in zip(labels, combined_predictions[0])}
+    return pred_labels</code></pre>
+
+    <h2>Example Predictions</h2>
+    <p>The following example shows how to use the prediction function to generate predictions for new ocular fundus images.</p>
+
+    <pre><code># Paths to new images
+new_left_image_path = '/path/to/left_image.jpg'
+new_right_image_path = '/path/to/right_image.jpg'
+
+# Predict diseases
+disease_predictions = predict_diseases(new_left_image_path, new_right_image_path, model)
+
+# Print the predictions
+for disease, score in disease_predictions.items():
+    print(f"{disease}: {score:.4f}")</code></pre>
+
+    <h2>Conclusion</h2>
+    <p>This CNN-based ocular disease recognition model can predict multiple ocular conditions using fundus images from both eyes. The model achieves a validation accuracy of approximately 51%, and further improvements could be made through hyperparameter tuning, data augmentation, or model architecture enhancements.</p>
+                    
+                   
                 `;
-            } else if (model === 'xray') {
+            } else if (model === 'nlp') {
                 content = `
-                    <h2>X-Ray Scan Model</h2>
-                    <p>This model identifies lung-related diseases from chest X-rays, including pneumonia and COVID-19.</p>
-                    <img src="path/to/xray_image.jpg" class="img-fluid" alt="X-Ray Scan">
-                    <h3>Performance Metrics</h3>
-                    <p>Accuracy: 97%<br>Precision: 95%<br>Recall: 96%</p>
-                    <!-- Add more info and images about the model here -->
+                    <h1>Medical Chatbot Using LLaMA 2.0</h1>
+
+<h2>Table of Contents</h2>
+<ol>
+    <li><a href="#project-overview">Project Overview</a></li>
+    <li><a href="#dataset-information">Dataset Information</a></li>
+    <li><a href="#model-information">Model Information</a></li>
+    <li><a href="#training-process">Training Process</a></li>
+    <li><a href="#results-and-evaluation">Results and Evaluation</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+</ol>
+
+<h2 id="project-overview">1. Project Overview</h2>
+<p>This project involves the development of a medical chatbot powered by the LLaMA 2.0 model. The chatbot is designed to provide medical recommendations, advice, and generate responses to queries from both patients and doctors. The model has been fine-tuned on a dataset of question-answer pairs from real doctor-patient interactions.</p>
+
+<h2 id="dataset-information">2. Dataset Information</h2>
+<ul>
+    <li><strong>Dataset Source:</strong> Collected from actual doctor-patient interactions.</li>
+    <li><strong>Data Format:</strong> The dataset consists of pairs of patient queries and doctor responses.</li>
+    <li><strong>Size:</strong> Total number of entries: 1,000 (example size; adjust as necessary).</li>
+    <li><strong>Example Entries:</strong>
+        <ul>
+            <li><strong>Patient:</strong> "What does abutment of the nerve root mean?"</li>
+            <li><strong>Doctor:</strong> "Abutment refers to..."</li>
+        </ul>
+    </li>
+</ul>
+
+<h3>Data Characteristics</h3>
+<p>The dataset includes a variety of medical topics, ensuring comprehensive coverage of potential patient queries. Data has been pre-processed to ensure quality and relevance.</p>
+
+<h2 id="model-information">3. Model Information</h2>
+<ul>
+    <li><strong>Model Architecture:</strong> LLaMA 2.0 (version 2.0)</li>
+    <li><strong>Model Type:</strong> Pre-trained language model fine-tuned for a medical question-answering task.</li>
+    <li><strong>Training Objective:</strong> To generate appropriate responses to patient queries based on the context provided in the training dataset.</li>
+</ul>
+
+<h2 id="training-process">4. Training Process</h2>
+<h3>Step-by-Step Breakdown:</h3>
+<ol>
+    <li><strong>Tokenization:</strong>
+        <pre><code>def tokenize_function(examples):
+    inputs = tokenizer(examples['Patient'], padding="max_length", truncation=True)
+    labels = tokenizer(examples['Doctor'], padding="max_length", truncation=True)
+    return {
+        "input_ids": inputs.input_ids,
+        "attention_mask": inputs.attention_mask,
+        "labels": labels.input_ids
+    }</code></pre>
+    </li>
+    <li><strong>Tokenizing the Dataset:</strong>
+        <pre><code>tokenized_dataset = dataset.map(tokenize_function, batched=True)</code></pre>
+    </li>
+    <li><strong>Defining Training Arguments:</strong>
+        <pre><code>training_args = TrainingArguments(
+    output_dir="./results",
+    evaluation_strategy="epoch",
+    per_device_train_batch_size=1,
+    per_device_eval_batch_size=1,
+    num_train_epochs=3,
+    save_steps=500,
+    save_total_limit=2,
+    logging_dir='./logs',
+    logging_steps=10,
+    gradient_accumulation_steps=16,
+    fp16=True,
+)</code></pre>
+    </li>
+    <li><strong>Trainer Initialization:</strong>
+        <pre><code>trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_dataset,
+    eval_dataset=tokenized_dataset,
+)</code></pre>
+    </li>
+    <li><strong>Model Training:</strong>
+        <pre><code>trainer.train()</code></pre>
+    </li>
+    <li><strong>Model Saving:</strong>
+        <pre><code>model.save_pretrained("./fine-tuned-llama")
+tokenizer.save_pretrained("./fine-tuned-llama")</code></pre>
+    </li>
+</ol>
+
+<h2 id="results-and-evaluation">5. Results and Evaluation</h2>
+<ul>
+    <li><strong>Evaluation Metrics:</strong> Evaluation strategies will be based on accuracy, loss, and other relevant metrics to assess model performance.</li>
+    <li><strong>Example Responses:</strong> The model can generate coherent and contextually relevant responses to patient queries, as shown in the training data examples.</li>
+</ul>
+
+<h2 id="usage">6. Usage</h2>
+<h3>Loading the Model:</h3>
+<pre><code>from transformers import LlamaForCausalLM, LlamaTokenizer
+
+model = LlamaForCausalLM.from_pretrained("./fine-tuned-llama")
+tokenizer = LlamaTokenizer.from_pretrained("./fine-tuned-llama")</code></pre>
+
+<h3>Generating Responses:</h3>
+<pre><code>input_text = "What should I do to reduce my weight gained due to genetic hypothyroidism?"
+inputs = tokenizer(input_text, return_tensors="pt")
+outputs = model.generate(**inputs)
+response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+print(response)</code></pre>
+
+<h2 id="conclusion">7. Conclusion</h2>
+<p>This medical chatbot, powered by the fine-tuned LLaMA 2.0 model, aims to provide reliable and informative responses to patient queries, enhancing communication between patients and healthcare providers. Future improvements could involve expanding the dataset, refining the model further, and incorporating more advanced features.</p>
+
                 `;
             } else if (model === 'skin') {
                 content = `
@@ -167,14 +409,142 @@
                     <img src="/static/images/loss.png" class="img-fluid" alt="Training/Validation Loss ">
                 `;
 
-            } else if (model === 'heart') {
+            } else if (model === 'sym') {
                 content = `
-                    <h2>Heart Disease Model</h2>
-                    <p>This model predicts the likelihood of heart diseases based on various health parameters.</p>
-                    <img src="path/to/heart_image.jpg" class="img-fluid" alt="Heart Disease Model">
-                    <h3>Performance Metrics</h3>
-                    <p>Accuracy: 92%<br>Precision: 89%<br>Recall: 90%</p>
-                    <!-- Add more info and images about the model here -->
+                    <h1>Symptom-Based Disease Prediction Model</h1>
+
+<h2>Overview</h2>
+<p>This document provides an overview of a symptom-based disease prediction model implemented in Python using a Jupyter Notebook. The model uses a set of symptoms and patient data to predict potential diseases. Below is a detailed explanation of how the model works, along with information on the input data, feature encoding, and prediction process.</p>
+<img src="/static/images/symtodie.png" class="img-fluid" alt="Ocular Scan">
+<h2>Input Data Collection</h2>
+<p>The model collects the following inputs from the user:</p>
+<ul>
+    <li><strong>Age:</strong> Numeric value representing the age of the patient.</li>
+    <li><strong>Gender:</strong> Categorical value (Male/Female).</li>
+    <li><strong>Fever:</strong> Binary value indicating the presence of fever (Yes/No).</li>
+    <li><strong>Cough:</strong> Binary value indicating the presence of cough (Yes/No).</li>
+    <li><strong>Fatigue:</strong> Binary value indicating the presence of fatigue (Yes/No).</li>
+    <li><strong>Difficulty Breathing:</strong> Binary value indicating difficulty in breathing (Yes/No).</li>
+    <li><strong>Blood Pressure:</strong> Categorical value indicating blood pressure levels (Low/Normal/High).</li>
+    <li><strong>Cholesterol Level:</strong> Categorical value indicating cholesterol levels (Low/Normal/High).</li>
+</ul>
+
+<h2>Feature Encoding</h2>
+<p>The input features are encoded into numerical values to be used for model prediction. For example:</p>
+<ul>
+    <li><strong>Gender:</strong> Encoded as 0 for Male and 1 for Female.</li>
+    <li><strong>Symptoms:</strong> Fever, Cough, Fatigue, and Difficulty Breathing are encoded as 0 for No and 1 for Yes.</li>
+    <li><strong>Blood Pressure:</strong> Assigned numerical values based on the category (e.g., Low = 0, Normal = 1, High = 2).</li>
+    <li><strong>Cholesterol Levels:</strong> Assigned numerical values based on the category (e.g., Low = 0, Normal = 1, High = 2).</li>
+</ul>
+
+<h2>Prediction Model</h2>
+<p>The encoded features are fed into a trained machine learning model that predicts the likely disease. The predicted output is mapped to a disease name using a predefined dictionary. For example, based on the inputs provided, the model predicted <strong>Schizophrenia</strong> as the disease.</p>
+
+<h2>Model Details</h2>
+<p>The details of the machine learning model (such as model type, training data, accuracy, and performance metrics) are not included in this section as they were not explicitly mentioned in the notebook. However, typical models used for disease prediction may include:</p>
+<ul>
+    <li>Logistic Regression</li>
+    <li>Decision Trees</li>
+    <li>Neural Networks</li>
+</ul>
+<p>These models are trained on a dataset of patient symptoms and diagnosed diseases.</p>
+                `;
+            }else if (model === 'xray') {
+                content = `
+                 <h1>Fracture Detection Model Documentation</h1>
+
+    <h2>Overview</h2>
+    <p>This document provides detailed information about the fracture detection model built using TensorFlow and Keras. The model is trained to classify X-ray images of joints to determine whether they are fractured or not. It also includes an interactive Gradio interface for user input and prediction.</p>
+
+    <h2>Model Architecture</h2>
+    <p><b>Base Model:</b> VGG16</p>
+    <p>The fracture detection model uses the pre-trained VGG16 architecture, which is widely recognized for its success in image classification tasks.</p>
+    <ul>
+      <li><b>Convolutional Layers:</b> Extract image features from X-ray inputs.</li>
+      <li><b>Max Pooling Layers:</b> Reduce the dimensionality of the extracted features.</li>
+      <li><b>Fully Connected Layers:</b> Used for final classification of the image.</li>
+    </ul>
+    <p><b>Input Shape:</b> (150, 150, 3) – The model accepts RGB images resized to 150x150 pixels.</p>
+    <p><b>Output:</b> The model predicts a binary outcome:</p>
+    <ul>
+      <li><b>0:</b> Fractured</li>
+      <li><b>1:</b> Not Fractured</li>
+    </ul>
+
+    <h2>Training</h2>
+    <ul>
+      <li><b>Dataset:</b> The model was trained on X-ray images with labeled fracture statuses. Proper data splitting was performed for training and validation sets.</li>
+      <li><b>Loss Function:</b> Binary Crossentropy, which is suitable for binary classification tasks.</li>
+      <li><b>Optimizer:</b> Adam optimizer for adaptive learning rate adjustments.</li>
+    </ul>
+    <img src="/static/images/xray_graph_new.jpg" class="img-fluid" alt="Training/Validation Loss ">
+
+    <h2>Model Loading</h2>
+    <p>After training, the model is saved in HDF5 format and can be loaded as follows:</p>
+    <pre><code>from tensorflow.keras.models import load_model
+model = load_model("fracture_classifier_vgg16.h5")</code></pre>
+
+    <h2>Gradio Interface</h2>
+    <p><b>Gradio</b> is used to provide a user-friendly interface for the model. It allows users to upload an X-ray image and get predictions on whether the joint is fractured or not.</p>
+
+    <h3>Code Implementation</h3>
+    <pre><code>import gradio as gr
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
+import numpy as np
+
+# Load the pre-trained model
+model = load_model("fracture_classifier_vgg16.h5")
+
+# Define the prediction function
+def predict(img):
+    img = image.load_img(img, target_size=(150, 150))  # Resize image to the expected input shape
+    img_array = image.img_to_array(img) / 255.0  # Normalize the image
+    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    prediction = model.predict(img_array)  # Make a prediction
+
+    # Interpret the prediction
+    if prediction[0] > 0.5:
+        return f"Prediction: Not Fractured (Confidence: {prediction[0][0]:.2f})"
+    else:
+        return f"Prediction: Fractured (Confidence: {1 - prediction[0][0]:.2f})"
+
+# Set up Gradio interface
+interface = gr.Interface(
+    fn=predict,
+    inputs=gr.Image(type="filepath"),
+    outputs="text",
+    title="Fracture Detection",
+    description="Upload an X-ray image of a joint to detect if it's fractured."
+)
+
+# Launch the Gradio interface
+if __name__ == "__main__":
+    interface.launch()</code></pre>
+
+    <h2>Input and Output</h2>
+    <ul>
+      <li><b>Input:</b> Users upload an X-ray image (in JPG/PNG format) via the Gradio interface.</li>
+      <li><b>Output:</b> The application returns a text output with the prediction (Fractured/Not Fractured) along with the confidence score.</li>
+    </ul>
+
+    <h2>Running the Application</h2>
+    <p>To run the Gradio interface, ensure that you have the necessary libraries installed:</p>
+    <pre><code>pip install tensorflow gradio</code></pre>
+    <p>Run the application script:</p>
+    <pre><code>python your_script.py</code></pre>
+    <p>Access the Gradio interface by navigating to <code>http://0.0.0.0:7860</code> in your browser.</p>
+
+    <h2>Additional Considerations</h2>
+    <p>To further improve the model:</p>
+    <ul>
+      <li>Use more diverse and augmented data to improve generalization.</li>
+      <li>Regularly monitor performance metrics (e.g., accuracy, loss) during training to avoid overfitting.</li>
+    </ul>
+
+    <h2>Conclusion</h2>
+    <p>This documentation outlines the fracture detection model built using TensorFlow and Gradio. The Gradio interface provides an easy-to-use way to interact with the model, allowing users to upload X-ray images and receive a fracture prediction.</p>
                 `;
             }
 
