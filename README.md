@@ -1,6 +1,7 @@
 
 
 ## Hacktober Contributions Accepted
+### Read the Contribution documentaion before starting.
 
 # Medical Chatbot and Disease Prediction System
 
