@@ -1,5 +1,7 @@
 
 
+## Hacktober Contributions Accepted
+
 # Medical Chatbot and Disease Prediction System
 
 This project is a web-based application that offers a chatbot for medical conversations and image-based disease prediction, such as ocular and skin disease predictions. The backend is built using Express.js and integrates with Gradio-hosted machine learning models to provide medical insights.
@@ -90,7 +92,7 @@ By default, the server will start on `http://localhost:3000`.
 
 ## Deployment
 
-You can deploy this project to any Node.js hosting platform such as Heroku, DigitalOcean, or Vercel.
+Initially it is deployed on vercel you can try it there: https://medai-phi.vercel.app/
 
 ## Screenshots
 
@@ -110,29 +112,19 @@ Here are some screenshots of the application:
 
 
 
-### Deploy to Heroku
-
-1. Install Heroku CLI: https://devcenter.heroku.com/articles/heroku-cli
-2. Run the following commands:
-
-```bash
-heroku login
-heroku create
-git push heroku main
-```
-
-3. Your application will be available at the Heroku-generated URL.
 
 ## Future Improvements
 
 - Add authentication for storing and retrieving users' chat history securely.
 - Improve the chatbot by integrating more advanced natural language processing (NLP) models.
 - Expand the disease prediction models to cover more medical conditions.
+- Make better UI
+- Any other features will be appriated.
 
 ## License
 
 This project is licensed under the MIT License.
-```
+
 
 ### Usage Instructions
 Make sure to replace the placeholder `Gradio` model paths in the code with actual model paths from Gradio once they're available. You can further customize the design in the `templates` directory to fit your style preferences.
