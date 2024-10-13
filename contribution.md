@@ -2,7 +2,7 @@
 
 # Contributing to MED.ai
 
-We’re excited that you’re interested in contributing to [Project Name]! Whether it's fixing bugs, adding new features, or improving documentation, your contributions are welcome. Please follow the guidelines below to help keep everything running smoothly.
+We’re excited that you’re interested in contributing to MED.ai! Whether it's fixing bugs, adding new features, or improving documentation, your contributions are welcome. Please follow the guidelines below to help keep everything running smoothly.
 
 ## How to Contribute
 
