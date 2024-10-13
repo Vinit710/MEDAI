@@ -1,6 +1,6 @@
 
 
-# Contributing to [Project Name]
+# Contributing to MED.ai
 
 We’re excited that you’re interested in contributing to [Project Name]! Whether it's fixing bugs, adding new features, or improving documentation, your contributions are welcome. Please follow the guidelines below to help keep everything running smoothly.
 
@@ -54,7 +54,7 @@ Go to your forked repository on GitHub, and click the "Compare & pull request" b
 - Reference the issue number (e.g., `Fixes #123`).
 - Submit the pull request.
 
-## Additional Guidelines
+## Additional Guidelines for maintainers
 
 - **Open Issues First**: Always create an issue before working on major changes.
 - **Respectful Collaboration**: Be professional and respectful in all interactions.
@@ -64,10 +64,6 @@ Go to your forked repository on GitHub, and click the "Compare & pull request" b
 
 ## Thank You!
 
-We appreciate your contributions and are excited to collaborate with you to improve [Project Name]. Happy coding!
+We appreciate your contributions and are excited to collaborate with you to improve MED.ai. Happy coding!
 
 
-### Key Updates:
-- **Simplified instructions**: Streamlined the steps for contributing to make them easy to follow.
-- **Professional tone**: The language is concise and professional, with clear expectations for contributors.
-- **Focus on clarity**: The guidelines emphasize clarity around creating issues, committing changes, and submitting pull requests.
