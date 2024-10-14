@@ -113,6 +113,7 @@
         color: #6c757d;
       }
     </style>
+    <link rel="stylesheet" href="../static/css/darkmode.css" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
@@ -146,6 +147,10 @@
             </li>
             <li class="nav-item">
               <a class="nav-link active" href="/chatbot">Chat Now</a>
+            </li>
+            <!-- Dark mode button -->
+            <li class="nav-item">
+              <button class="btn btn-outline-light" id="toggleTheme"><i class="fas fa-sun"></i></button>
             </li>
           </ul>
         </div>
@@ -405,5 +410,6 @@
       window.onbeforeunload = saveCurrentSession;
       window.onload = initializeSession;
     </script>
+    <script src="../static/js/darkmode.js"></script>
   </body>
 </html>

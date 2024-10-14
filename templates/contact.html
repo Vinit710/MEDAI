@@ -37,6 +37,7 @@
             margin-top: 50px;
         }
     </style>
+    <link rel="stylesheet" href="../static/css/darkmode.css" />
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -68,7 +69,10 @@
                     <li class="nav-item"></li>
                         <a class="nav-link" href="/chatbot">Chat Now</a>
                     </li>
-
+                    <!-- Dark mode button -->
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light" id="toggleTheme"><i class="fas fa-sun"></i></button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -160,5 +164,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/js/darkmode.js"></script>
 </body>
 </html>
