@@ -6,39 +6,138 @@
     <title>About Us - MED.ai</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f8ff; /* Light blue background */
+            color: #333;
         }
         .navbar {
-            background-color: #007bff;
+            background-color: #1e90ff; /* Dodger blue */
         }
         .navbar-brand {
             font-weight: bold;
             font-size: 24px;
         }
         .about-container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(30, 144, 255, 0.2);
+            padding: 40px;
             margin-top: 50px;
         }
         .mission-icon {
-            font-size: 3rem;
-            color: #0056b3;
-            margin-bottom: 1rem;
+            font-size: 3.5rem;
+            color: #1e90ff; /* Dodger blue */
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .mission-icon:hover {
+            transform: scale(1.1);
+            color: #4169e1; /* Royal blue on hover */
+        }
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #1e90ff; /* Dodger blue */
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        .timeline-container {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: white;
+            border: 4px solid #1e90ff; /* Dodger blue */
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .left {
+            left: 0;
+        }
+        .right {
+            left: 50%;
+        }
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid #1e90ff; /* Dodger blue */
+            border-width: 10px 0 10px 10px;
+            border-color: transparent #1e90ff transparent transparent; /* Dodger blue */
+        }
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid #1e90ff; /* Dodger blue */
+            border-width: 10px 10px 10px 0;
+            border-color: transparent transparent transparent #1e90ff; /* Dodger blue */
+        }
+        .right::after {
+            left: -16px;
+        }
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 0 15px rgba(30, 144, 255, 0.1);
         }
         footer {
-            background-color: #0056b3;
+            background-color: #1e90ff; /* Dodger blue */
             color: white;
             padding: 20px 0;
             margin-top: 50px;
         }
+        .value-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(30, 144, 255, 0.2);
+        }
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(30, 144, 255, 0.2);
+        }
+        .value-card h4 {
+            color: #1e90ff; /* Dodger blue */
+        }
+        .bg-pattern {
+            background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%234169e1" fill-opacity="0.05" fill-rule="evenodd"%3E%3Cpath d="M0 40L40 0H20L0 20M40 40V20L20 40"/%3E%3C/g%3E%3C/svg%3E');
+            background-attachment: fixed;
+        }
     </style>
 </head>
-<body>
+<body class="bg-pattern">
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a href="#" class="logo" style="position: relative; display: inline-block;">
@@ -79,7 +178,7 @@
         <div class="row">
             <div class="col-md-10 offset-md-1">
                 <div class="about-container">
-                    <h2 class="text-center mb-4">About MED.ai</h2>
+                    <h1 class="text-center mb-4" style="color: #1e90ff;">About MED.ai</h1>
                     <p class="lead text-center mb-5">MED.ai is a cutting-edge healthcare assistant powered by artificial intelligence, designed to revolutionize the way we approach medical diagnoses and patient care.</p>
                     
                     <div class="row mb-5">
@@ -106,19 +205,67 @@
                         </div>
                     </div>
 
-                    <h3 class="mb-4">Our Story</h3>
-                    <p>Founded in 2022, MED.ai emerged from a simple yet powerful idea: to harness the power of artificial intelligence to enhance healthcare delivery and patient outcomes. Our journey began when a team of AI researchers and medical professionals came together, united by the vision of creating a more accessible, efficient, and accurate healthcare system.</p>
-                    <p>Since our inception, we've been dedicated to developing state-of-the-art AI algorithms that can assist in medical diagnoses, treatment recommendations, and patient care. Our technology is designed to work alongside healthcare professionals, augmenting their expertise and helping them make more informed decisions.</p>
-                    <p>Today, MED.ai continues to push the boundaries of what's possible in AI-assisted healthcare. We're committed to ongoing research, continuous improvement, and maintaining the highest standards of ethics and privacy in all our operations.</p>
+                    <h2 class="mb-4">Our Journey</h2>
+                    <div class="timeline">
+                        <div class="timeline-container left">
+                            <div class="timeline-content">
+                                <h3>2022</h3>
+                                <p>MED.ai is founded with a vision to revolutionize healthcare using AI.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-container right">
+                            <div class="timeline-content">
+                                <h3>2023</h3>
+                                <p>Launch of our first AI-powered diagnostic tool, assisting doctors worldwide.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-container left">
+                            <div class="timeline-content">
+                                <h3>2024</h3>
+                                <p>Expansion of services to include personalized treatment recommendations.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-container right">
+                            <div class="timeline-content">
+                                <h3>Today</h3>
+                                <p>Continuing to innovate and improve healthcare outcomes globally.</p>
+                            </div>
+                        </div>
+                    </div>
 
-                    <h3 class="mt-5 mb-4">Our Values</h3>
-                    <ul>
-                        <li><strong>Innovation:</strong> We constantly strive to improve and innovate in the field of AI-assisted healthcare.</li>
-                        <li><strong>Accuracy:</strong> We are committed to providing the most accurate and reliable AI-powered medical assistance.</li>
-                        <li><strong>Accessibility:</strong> We believe in making quality healthcare accessible to all through technology.</li>
-                        <li><strong>Privacy:</strong> We prioritize the protection of patient data and maintain the highest standards of privacy and security.</li>
-                        <li><strong>Collaboration:</strong> We work closely with healthcare professionals to ensure our AI complements and enhances their expertise.</li>
-                    </ul>
+                    <h2 class="mt-5 mb-4">Our Values</h2>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="value-card">
+                                <h4><i class="fas fa-lightbulb me-2"></i>Innovation</h4>
+                                <p>We constantly strive to improve and innovate in the field of AI-assisted healthcare.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="value-card">
+                                <h4><i class="fas fa-check-circle me-2"></i>Accuracy</h4>
+                                <p>We are committed to providing the most accurate and reliable AI-powered medical assistance.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="value-card">
+                                <h4><i class="fas fa-universal-access me-2"></i>Accessibility</h4>
+                                <p>We believe in making quality healthcare accessible to all through technology.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="value-card">
+                                <h4><i class="fas fa-shield-alt me-2"></i>Privacy</h4>
+                                <p>We prioritize the protection of patient data and maintain the highest standards of privacy and security.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="value-card">
+                                <h4><i class="fas fa-hands-helping me-2"></i>Collaboration</h4>
+                                <p>We work closely with healthcare professionals to ensure our AI complements and enhances their expertise.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
