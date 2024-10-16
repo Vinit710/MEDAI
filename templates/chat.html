@@ -132,6 +132,7 @@
         const userMode = document.getElementById('userMode');
         let currentSession = [];
         let sessionId;
+        let hasUserInteracted = false; // Track if user has interacted
 
         // Initialize or load sessions
         function initializeSession() {
@@ -140,8 +141,10 @@
             displayChatHistory(storedSessions);
         }
 
-        // Save current chat session on page unload
+        // Save current chat session on page unload, but only if the user has interacted
         function saveCurrentSession() {
+            if (!hasUserInteracted) return; // Don't save if user hasn't interacted
+
             const storedSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
             storedSessions.push({ id: `Chat ${sessionId}`, messages: currentSession });
             localStorage.setItem('chatSessions', JSON.stringify(storedSessions));
@@ -182,6 +185,7 @@
             const message = messageInput.value.trim();
             if (!message) return;
 
+            hasUserInteracted = true; // Mark that user has interacted
             // Add user message to chat
             addMessage(message, true);
             messageInput.value = '';
@@ -217,9 +221,11 @@
             if (e.key === 'Enter') sendMessage();
         });
 
-        // When user reloads the page, save current session
+        // When user reloads the page, save current session only if interacted
         window.onbeforeunload = saveCurrentSession;
 
         // Initialize new session when page loads
         window.onload = initializeSession;
-    </script>
+    </script> 
+</body>
+</html>
