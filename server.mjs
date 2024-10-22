@@ -23,7 +23,7 @@ const skinClient = await Client.connect("Vinit710/Skin_Disease");
 const chatClient = await Client.connect("Vinit710/Chatbot");
 const symtodieClient = await Client.connect('Vinit710/symtodise');
 // Connect to the Hugging Face model via Gradio Client
-const xrayClient = await Client.connect("darksoule26/fracture");
+const xrayClient = await Client.connect("darksoule26/fracture2");
 
 const app = express();
 const port = 3000;
