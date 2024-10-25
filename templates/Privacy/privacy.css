@@ -1,0 +1,198 @@
+/* General Styles */
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+h1, h2 {
+    color: #0955b1;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 1.8rem; /* Reduced font size */
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.4rem; /* Reduced font size */
+    margin-top: 20px;
+    color: #063375;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #004085;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    /* padding: 0 1.5%; Reduced padding */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px; /* Reduced height */
+}
+
+.navbar .navbar-nav {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.navbar .navbar-nav .nav-item .nav-link {
+    color: #fff;
+    padding: 10px 15px; /* Reduced padding */
+    font-size: 0.9rem; /* Reduced font size */
+    transition: color 0.3s ease;
+}
+
+.navbar .navbar-nav .nav-item .nav-link:hover,
+.navbar .navbar-nav .nav-item .nav-link.active {
+    color: #ffd700;
+}
+
+.navbar .btn {
+    color: white;
+    padding: 6px 10px; /* Reduced button padding */
+    font-size: 0.9rem; /* Reduced font size */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar .btn:hover {
+    background-color: #063375;
+    transform: scale(1.05);
+}
+
+/* Fixed Logo Container Styles */
+.navbar .logo {
+    display: flex;
+    align-items: center;
+}
+
+.navbar .logo img {
+    width: 60px; /* Reduced logo size */
+    height: 60px; /* Reduced logo size */
+}
+
+.navbar .logo span {
+    margin-left: 30px;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem; /* Reduced font size */
+}
+
+/* Content Container Styles */
+.container {
+    max-width: 90%; /* Reduced container width */
+    margin: 80px auto; /* Adjusted for smaller navbar */
+    padding: 1.5rem; /* Reduced padding */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    color: #333;
+    text-align: left;
+}
+
+.container h1, .container h2 {
+    text-align: left;
+}
+
+.container p {
+    margin-bottom: 1.2rem;
+    line-height: 1.6;
+    color: #555;
+    font-size: 1rem; /* Reduced font size */
+}
+
+.container ul {
+    margin-left: 1.5rem;
+}
+
+ul li {
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem; /* Reduced font size */
+}
+
+/* Links inside the container */
+.container a {
+    color: #004085;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.container a:hover {
+    color: #063375;
+}
+
+/* Responsive Styling for Smaller Screens */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .navbar .navbar-nav .nav-item .nav-link {
+        padding: 0px 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+}
+
+/* For small screen devices */
+@media (max-width: 992px) {
+    .container {
+        padding: 10px;
+        margin: 80px 10px; /* Adjusted margin for smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 8px;
+        margin: 80px 5px; /* Adjusted margin for smaller screens */
+    }
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #004085;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer p {
+    margin: 0.5rem 0;
+}
+
+.footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.footer a {
+    color: #ffd700;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
