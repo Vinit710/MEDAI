@@ -14,6 +14,18 @@
         .navbar {
             background-color: #0056b3;
         }
+        .navbar-nav .nav-link {
+            color: #f7fbff;
+            opacity: 0.76;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #ffffff;  
+            opacity: 0.83;      
+        }
+        .navbar-nav .nav-link.active {
+            color: #ffffff;  
+            opacity: 1;      
+        }
         .navbar-brand {
             font-weight: bold;
             font-size: 24px;
@@ -69,13 +81,22 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item"></li>
+                        <a class="nav-link" href="/docs">Docs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/booking">Book Appointment</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/about">About</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/chatbot">Chat Now</a>
                     </li>
                 </ul>
             </div>
