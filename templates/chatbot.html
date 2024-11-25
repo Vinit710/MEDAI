@@ -14,114 +14,210 @@
     />
     <style>
       body {
-        background-color: #f0f0f0;
-        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        font-family: "Roboto", Arial, sans-serif;
+      }
+      .navbar {
+        background-color: #007bff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .navbar-brand {
+        font-weight: bold;
+      }
+      .navbar-nav .nav-link {
+        margin: 0 5px;
+        transition: color 0.3s ease;
+      }
+      .navbar-nav .nav-link:hover {
+        color: #f8f9fa !important;
+      }
+      .main-container {
+        max-width: 1200px;
+        margin: 1rem auto;
+        padding: 0 15px;
       }
       .chat-container {
         display: flex;
-        height: calc(100vh - 56px);
-        margin-top: 56px;
+        flex-direction: column;
+        height: calc(100vh - 180px);
+        min-height: 500px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .chat-header {
+        background-color: #f8f9fa;
+        padding: 10px 15px;
+        border-bottom: 1px solid #e9ecef;
+      }
+      .chat-body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
       }
       .chat-history {
-        flex: 0 0 20%;
+        flex: 0 0 30%;
         background-color: #ffffff;
-        border-right: 1px solid #ccc;
-        padding: 20px;
+        border-right: 1px solid #e9ecef;
+        padding: 15px;
         display: flex;
         flex-direction: column;
+        overflow-y: auto;
       }
       .chat-history-header {
         font-weight: bold;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
       .chat-content {
         flex: 1;
-        padding: 20px;
-        background-color: #fefefe;
+        background-color: #ffffff;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        position: relative;
-        overflow: hidden;
       }
-      .chat-content::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 300px;
-        height: 300px;
-        background-image: url("/api/placeholder/300/300");
-        background-repeat: no-repeat;
-        background-position: center;
-        opacity: 0.1;
-        pointer-events: none;
+      #chatbox {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        padding: 15px;
+        overflow-y: auto;
       }
       .message {
         margin-bottom: 10px;
-        padding: 10px;
-        border-radius: 10px;
-        max-width: 70%;
-        z-index: 1;
+        padding: 8px 12px;
+        border-radius: 18px;
+        max-width: 80%;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       }
-      
       .user-message {
         background-color: #007bff;
         color: white;
         align-self: flex-end;
+        border-bottom-right-radius: 5px;
       }
       .bot-message {
-        background-color: #f1f0f0;
+        background-color: #f1f3f5;
         align-self: flex-start;
+        border-bottom-left-radius: 5px;
       }
-      #chatbox {
-        overflow-y: auto;
-        flex-grow: 1;
-        padding: 20px;
-      }
-      #history-list {
-        overflow-y: auto;
-        flex-grow: 1;
+      .input-area {
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
       }
       #history-list div {
         cursor: pointer;
-        color: #007bff;
-        margin-bottom: 10px;
-        padding: 5px;
+        color: #495057;
+        margin-bottom: 8px;
+        padding: 6px 10px;
         border-radius: 5px;
         transition: background-color 0.3s;
       }
       #history-list div:hover {
         background-color: #e9ecef;
       }
-      .toggle-container {
-        margin-bottom: 10px;
-      }
       .tools-container {
-        display: none;
-        margin-bottom: 10px;
+        padding: 10px 15px;
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
       }
       .model-info {
         margin-top: auto;
         padding-top: 10px;
-        border-top: 1px solid #ccc;
+        border-top: 1px solid #e9ecef;
         font-size: 0.8em;
         color: #6c757d;
+      }
+      .booking-form-container {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+      .booking-form-container h2 {
+        margin-bottom: 1.5rem;
+        color: #007bff;
+      }
+      .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      }
+      @media (max-width: 991.98px) {
+        .navbar-nav {
+          flex-direction: row;
+          justify-content: center;
+        }
+        .navbar-nav .nav-item {
+          margin: 0 5px;
+        }
+        .chat-body {
+          flex-direction: column;
+        }
+        .chat-history {
+          flex: 0 0 auto;
+          max-height: 200px;
+          border-right: none;
+          border-bottom: 1px solid #e9ecef;
+        }
+        .tools-container .btn-group {
+          flex-wrap: wrap;
+        }
+        .tools-container .btn {
+          flex: 1 0 40%;
+          margin: 2px;
+        }
+      }
+      @media (max-width: 767.98px) {
+        .chat-container {
+          height: calc(100vh - 150px);
+        }
+        .booking-form-container {
+          padding: 1rem;
+        }
+        .booking-form-container .row {
+          flex-direction: column;
+        }
+        .booking-form-container .col-md-4 {
+          width: 100%;
+        }
+      }
+      @media (max-width: 575.98px) {
+        .navbar-brand img {
+          width: 30px;
+          height: 30px;
+        }
+        .navbar-brand span {
+          font-size: 0.9em;
+        }
+        .chat-header .btn-group {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .chat-header .btn-group .btn {
+          margin-bottom: 5px;
+        }
+        .message {
+          max-width: 90%;
+        }
       }
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
-        <a href="#" class="logo" style="position: relative; display: inline-block;">
-          <img src="https://www.freepnglogos.com/uploads/medical-logo-png-14.png" width="65" height="50" alt="Doclab home" style="margin-left: -40px;">
-          <span style="position: absolute; top: 50%; left: 130%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-family: 'Arial', sans-serif;">Medbot</span>
-      </a>
-
+        <a href="#" class="navbar-brand d-flex align-items-center">
+          <img
+            src="https://www.freepnglogos.com/uploads/medical-logo-png-14.png"
+            width="40"
+            height="40"
+            alt="Doclab home"
+            class="me-2"
+          />
+          <span>MedBot</span>
+        </a>
         <button
           class="navbar-toggler"
           type="button"
@@ -135,8 +231,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/docs">Docs</a></li>
             <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
+              <a class="nav-link" href="/booking">Book</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/about">About</a>
@@ -145,27 +243,21 @@
               <a class="nav-link" href="/contact">Contact</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/chatbot">Chat Now</a>
+              <a class="nav-link active" href="/chatbot">Chat</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <div class="chat-container">
-      <div class="chat-history">
-        <div class="chat-history-header">
-          <span>Chat History</span>
-          <button class="btn btn-sm btn-outline-danger" id="clearHistory">
-            Clear
-          </button>
-        </div>
-        <div id="history-list"></div>
-        <div class="model-info">Current model: LLaMA 2.0-custom </div>
-      </div>
-      <div class="chat-content">
-        <div class="toggle-container">
-          <div class="btn-group" role="group" aria-label="User type toggle">
+    <div class="main-container">
+      <div class="chat-container">
+        <div class="chat-header">
+          <div
+            class="btn-group w-100"
+            role="group"
+            aria-label="User type toggle"
+          >
             <input
               type="radio"
               class="btn-check"
@@ -187,58 +279,84 @@
             >
           </div>
         </div>
-        <div id="chatbox" class="d-flex flex-column">
-          <div class="message bot-message">
-            <i class="fas fa-robot me-2"></i>How can I assist you today?
+        <div class="chat-body">
+          <div class="chat-history">
+            <div class="chat-history-header">
+              <span>Chat History</span>
+              <button class="btn btn-sm btn-outline-danger" id="clearHistory">
+                Clear
+              </button>
+            </div>
+            <div id="history-list"></div>
+            <div class="model-info">Current model: LLaMA 2.0-custom</div>
           </div>
-        </div>
-        <div class="tools-container">
-          <div class="btn-group" role="group" aria-label="Doctor Tools">
-            <a href="/ocular" class="btn btn-outline-secondary">Ocular Scan</a>
-            <a href="/skin_disease" class="btn btn-outline-secondary"
-              >Skin Scan</a
-            >
-            <a href="/symtodie" class="btn btn-outline-secondary"
-              >Symtom to disease</a
-            >
-            <a href="/xray" class="btn btn-outline-secondary"
-              >x ray diagnosis</a
-            >
+          <div class="chat-content">
+            <div id="chatbox">
+              <div class="message bot-message">
+                <i class="fas fa-robot me-2"></i>How can I assist you today?
+              </div>
+            </div>
+            <div class="tools-container" style="display: none">
+              <div
+                class="btn-group d-flex flex-wrap"
+                role="group"
+                aria-label="Doctor Tools"
+              >
+                <a href="/ocular" class="btn btn-outline-secondary"
+                  >Ocular Scan</a
+                >
+                <a href="/skin_disease" class="btn btn-outline-secondary"
+                  >Skin Scan</a
+                >
+                <a href="/symtodie" class="btn btn-outline-secondary"
+                  >Symptom to Disease</a
+                >
+                <a href="/xray" class="btn btn-outline-secondary"
+                  >X-ray Diagnosis</a
+                >
+              </div>
+            </div>
+            <div class="input-area">
+              <div class="input-group">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="voiceInput"
+                  onclick="runSpeechRecognition()"
+                >
+                  <i class="fas fa-microphone" id="voiceIcon"></i>
+                </button>
+                <input
+                  type="text"
+                  id="messageInput"
+                  class="form-control"
+                  placeholder="Type your message..."
+                />
+                <button class="btn btn-primary" type="button" id="sendMessage">
+                  <i class="fas fa-paper-plane me-2"></i>Send
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="input-group mt-3">
-          <input
-            type="text"
-            id="messageInput"
-            class="form-control"
-            placeholder="Type your message..."
-          />
-          <button class="btn btn-primary" type="button" id="sendMessage">
-            <i class="fas fa-paper-plane me-2"></i>Send
-          </button>
         </div>
       </div>
-    </div>
 
-
-
-
-    <div id="bookingForm" class="booking-form">
-      <div class="form-content">
-        <span class="close">&times;</span>
+      <div class="booking-form-container">
         <h2>Book an Appointment</h2>
         <form id="bookForm">
-          <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" required>
-          </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" required>
-          </div>
-          <div class="mb-3">
-            <label for="phone" class="form-label">Phone</label>
-            <input type="tel" class="form-control" id="phone" required>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" required />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" required />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="phone" class="form-label">Phone</label>
+              <input type="tel" class="form-control" id="phone" required />
+            </div>
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -247,26 +365,34 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-       const chatbox = document.getElementById("chatbox");
+      const chatbox = document.getElementById("chatbox");
       const messageInput = document.getElementById("messageInput");
       const sendButton = document.getElementById("sendMessage");
       const historyList = document.getElementById("history-list");
       const clearHistoryButton = document.getElementById("clearHistory");
-      const userTypeToggle = document.querySelectorAll('input[name="userType"]');
+      const userTypeToggle = document.querySelectorAll(
+        'input[name="userType"]'
+      );
       const toolsContainer = document.querySelector(".tools-container");
       const bookingForm = document.getElementById("bookingForm");
       const closeFormButton = document.querySelector(".close");
       let currentSession = [];
       let sessionId;
+      let hasUserInteracted = false; // Flag to track if user has interacted
 
+      // Initialize the session, loading saved sessions if they exist
       function initializeSession() {
-        const storedSessions = JSON.parse(localStorage.getItem("chatSessions")) || [];
-        sessionId = storedSessions.length + 1;
+        const storedSessions =
+          JSON.parse(localStorage.getItem("chatSessions")) || [];
+        sessionId = storedSessions.length + 1; // Assign a session ID
         displayChatHistory(storedSessions);
       }
 
+      // Save the current session to localStorage, but only if the user has interacted
       function saveCurrentSession() {
-        const storedSessions = JSON.parse(localStorage.getItem("chatSessions")) || [];
+        if (!hasUserInteracted) return; // Skip saving if no interaction
+        const storedSessions =
+          JSON.parse(localStorage.getItem("chatSessions")) || [];
         storedSessions.push({
           id: `Chat ${sessionId}`,
           messages: currentSession,
@@ -274,49 +400,129 @@
         localStorage.setItem("chatSessions", JSON.stringify(storedSessions));
       }
 
+      // Display saved chat sessions in the history list
       function displayChatHistory(sessions) {
         historyList.innerHTML = "";
         sessions.forEach((session) => {
           const historyItem = document.createElement("div");
           historyItem.textContent = session.id;
           historyItem.classList.add("history-item");
-          historyItem.addEventListener("click", () => loadChatHistory(session.messages));
+          historyItem.addEventListener("click", () =>
+            loadChatHistory(session.messages)
+          );
           historyList.appendChild(historyItem);
         });
       }
 
+      // Load a chat session's messages into the chatbox
       function loadChatHistory(messages) {
         chatbox.innerHTML = "";
         messages.forEach((msg) => addMessage(msg.content, msg.isUser));
       }
 
+      let currentUtterance = null;
+      let isPaused = false;
+
+      // Add a message to the chatbox, either as a user message or a bot message
       function addMessage(content, isUser) {
         const messageDiv = document.createElement("div");
-        messageDiv.classList.add("message", isUser ? "user-message" : "bot-message");
-        messageDiv.innerHTML = isUser ? content : `<i class="fas fa-robot me-2"></i>${content}`;
+        messageDiv.classList.add(
+          "message",
+          isUser ? "user-message" : "bot-message"
+        );
+
+        // For bot messages, include the mic icon for text-to-speech
+        if (isUser) {
+          messageDiv.innerHTML = content;
+        } else {
+          messageDiv.innerHTML = `
+            <i class="fas fa-robot me-2"></i>
+            <span>${content}</span>
+            <i class="fas fa-volume-up mic-icon" style="cursor: pointer; margin-left: 8px;"></i>
+        `;
+        }
+
         chatbox.appendChild(messageDiv);
-        chatbox.scrollTop = chatbox.scrollHeight;
+        chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
         currentSession.push({ content, isUser });
+
+        // Add event listener to the mic icon for bot messages
+        if (!isUser) {
+          const micIcon = messageDiv.querySelector(".mic-icon");
+          if (micIcon) {
+            micIcon.addEventListener("click", () =>
+              handleTextToSpeech(micIcon, content)
+            );
+          }
+        }
       }
 
+      function handleTextToSpeech(icon, message) {
+        if ("speechSynthesis" in window) {
+          // If there's currently speaking or paused speech, toggle play/pause
+          if (currentUtterance && speechSynthesis.speaking) {
+            if (isPaused) {
+              speechSynthesis.resume();
+              icon.classList.remove("fa-play");
+              icon.classList.add("fa-pause");
+              isPaused = false;
+            } else {
+              speechSynthesis.pause();
+              icon.classList.remove("fa-pause");
+              icon.classList.add("fa-play");
+              isPaused = true;
+            }
+          } else {
+            // If no speech is in progress, start a new speech
+            currentUtterance = new SpeechSynthesisUtterance(message);
+            currentUtterance.lang = "en-US";
+
+            // Update the icon to a pause button when speech starts
+            icon.classList.remove("fa-volume-up");
+            icon.classList.add("fa-pause");
+
+            // Event listener to revert icon once the speech ends
+            currentUtterance.onend = () => {
+              icon.classList.remove("fa-pause", "fa-play");
+              icon.classList.add("fa-volume-up");
+              currentUtterance = null;
+              isPaused = false;
+            };
+
+            // Start the speech
+            speechSynthesis.speak(currentUtterance);
+          }
+        } else {
+          console.warn("Speech Synthesis API not supported in this browser.");
+        }
+      }
+
+      // Show the appointment booking form
       function showBookingForm() {
         bookingForm.style.display = "block";
       }
 
+      // Close the booking form
       function closeForm() {
         bookingForm.style.display = "none";
       }
 
+      // Handle sending a user message
       async function sendMessage() {
         const message = messageInput.value.trim();
         if (!message) return;
 
+        hasUserInteracted = true; // Mark that the user has interacted
         addMessage(message, true);
         messageInput.value = "";
 
+        // Handle special case: Booking appointment
         if (message.toLowerCase().includes("book appointment")) {
           showBookingForm();
-          addMessage("Sure, I can help you book an appointment. Please fill out the form that has appeared.", false);
+          addMessage(
+            "Sure, I can help you book an appointment. Please fill out the form that has appeared.",
+            false
+          );
         } else {
           try {
             const response = await fetch("/chatbot", {
@@ -328,23 +534,30 @@
             addMessage(data.reply, false);
           } catch (error) {
             console.error("Error:", error);
-            addMessage("Sorry, there was an error processing your request.", false);
+            addMessage(
+              "Sorry, there was an error processing your request.",
+              false
+            );
           }
         }
       }
 
+      // Send message when button is clicked or "Enter" is pressed
       sendButton.addEventListener("click", sendMessage);
       messageInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") sendMessage();
       });
 
+      // Clear chat history from localStorage and reset the UI
       clearHistoryButton.addEventListener("click", () => {
         localStorage.removeItem("chatSessions");
         historyList.innerHTML = "";
         currentSession = [];
-        chatbox.innerHTML = '<div class="message bot-message"><i class="fas fa-robot me-2"></i>Chat history cleared. How can I assist you?</div>';
+        chatbox.innerHTML =
+          '<div class="message bot-message"><i class="fas fa-robot me-2"></i>Chat history cleared. How can I assist you?</div>';
       });
 
+      // Toggle the visibility of tools based on user type
       userTypeToggle.forEach((radio) => {
         radio.addEventListener("change", (e) => {
           if (e.target.id === "doctorBtn") {
@@ -355,54 +568,98 @@
         });
       });
 
+      // Close the booking form if the user clicks outside of it
       closeFormButton.onclick = closeForm;
-
-      window.onclick = function(event) {
+      window.onclick = function (event) {
         if (event.target == bookingForm) {
           closeForm();
         }
+      };
+
+      // Handle booking form submission
+      document
+        .getElementById("bookForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const name = document.getElementById("name").value;
+          const phone = document.getElementById("phone").value;
+          const email = document.getElementById("email").value;
+
+          closeForm();
+
+          addMessage(
+            "Your appointment booking request has been received. Please check your email for further information.",
+            false
+          );
+
+          fetch("http://localhost:3000/sendEmail", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: name,
+              phone: phone,
+              email: email,
+              hospital: "MED.ai Hospital", // You may want to make this dynamic
+              date: new Date().toLocaleString(),
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                console.log("Email sent successfully!");
+                addMessage(
+                  "An email confirmation has been sent to your provided email address.",
+                  false
+                );
+              } else {
+                console.error("Failed to send email:", data.message);
+                addMessage(
+                  "There was an issue sending the confirmation email. Please contact support.",
+                  false
+                );
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              addMessage(
+                "There was an error processing your request. Please try again later.",
+                false
+              );
+            });
+        });
+
+      const voiceButton = document.getElementById("voiceInput");
+
+      function runSpeechRecognition() {
+        if (!("webkitSpeechRecognition" in window)) {
+          alert("Speech Recognition API is not supported in this browser.");
+          return;
+        }
+
+        const recognition = new webkitSpeechRecognition();
+
+        recognition.lang = "en-US";
+
+        recognition.onstart = () => {
+          console.log("Speech recognition started.");
+        };
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          messageInput.value = transcript;
+        };
+
+        recognition.onerror = (event) => {
+          alert("Sorry, I couldn't recognize your voice. Please try again.");
+        };
+
+        recognition.start();
       }
 
-      document.getElementById('bookForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const email = document.getElementById('email').value;
-
-        closeForm();
-
-        addMessage("Your appointment booking request has been received. Please check your email for further information.", false);
-
-        fetch('http://localhost:3000/sendEmail', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: name,
-            phone: phone,
-            email: email,
-            hospital: "MED.ai Hospital", // You may want to make this dynamic
-            date: new Date().toLocaleString(),
-          }),
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              console.log('Email sent successfully!');
-              addMessage("An email confirmation has been sent to your provided email address.", false);
-            } else {
-              console.error('Failed to send email:', data.message);
-              addMessage("There was an issue sending the confirmation email. Please contact support.", false);
-            }
-          })
-          .catch(error => {
-            console.error('Error:', error);
-            addMessage("There was an error processing your request. Please try again later.", false);
-          });
-      });
-
+      // Save the current session only if the user has interacted
       window.onbeforeunload = saveCurrentSession;
+
+      // Initialize the session when the page loads
       window.onload = initializeSession;
     </script>
   </body>

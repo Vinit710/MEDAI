@@ -1,0 +1,47 @@
+name: Feature Addition Request 🌟
+description: Submit your feature addition requests for review.
+title: '🌟: '
+labels: ["Up-for-Grabs ✋", "feature 🌟"]
+assignees:
+  - ''
+
+body:
+  - type: textarea
+    id: feature-title
+    attributes:
+      label: Title
+      placeholder: Enter the title of your feature addition request here.
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature-aim
+    attributes:
+      label: Feature Aim
+      placeholder: Describe the aim of the feature addition.
+    validations:
+      required: true
+
+  - type: textarea
+    id: changes
+    attributes:
+      label: Changes
+      placeholder: Enlist those changes you want to make.
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots 📷
+      placeholder: Write N/A if not available.
+    validations:
+      required: false
+
+  - type: textarea
+    id: full-name
+    attributes:
+      label: Full Name
+      placeholder: Enter your full name here.
+    validations:
+      required: true
