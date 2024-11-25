@@ -23,10 +23,10 @@ const skinClient = await Client.connect("Vinit710/Skin_Disease");
 const chatClient = await Client.connect("Vinit710/Chatbot");
 const symtodieClient = await Client.connect('Vinit710/symtodise');
 // Connect to the Hugging Face model via Gradio Client
-const xrayClient = await Client.connect("darksoule26/fracture");
+// const xrayClient = await Client.connect("darksoule26/fracture");
 
 const app = express();
-const port = 3000;
+const port = 3001;
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
@@ -231,38 +231,38 @@ app.post('/predict_symtodie', async (req, res) => {
   }
 });
 
-// Handle X-ray image upload and prediction
-app.post('/predict_xray', upload.single('input_image'), async (req, res) => {
-  try {
-    const imagePath = req.file.path;
-    console.log(`Uploaded X-ray image path: ${imagePath}`);
+// // Handle X-ray image upload and prediction
+// app.post('/predict_xray', upload.single('input_image'), async (req, res) => {
+//   try {
+//     const imagePath = req.file.path;
+//     console.log(`Uploaded X-ray image path: ${imagePath}`);
 
-    // Read the image as a Blob
-    const imageBuffer = fs.readFileSync(imagePath);
-    const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });  // Set correct MIME type
+//     // Read the image as a Blob
+//     const imageBuffer = fs.readFileSync(imagePath);
+//     const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });  // Set correct MIME type
 
-    // Make the prediction call to the Hugging Face API
-    const result = await xrayClient.predict("/predict", {
-      img: imageBlob  // Use the Blob format as required by the API
-    });
+//     // Make the prediction call to the Hugging Face API
+//     const result = await xrayClient.predict("/predict", {
+//       img: imageBlob  // Use the Blob format as required by the API
+//     });
 
-    console.log('Prediction result:', result);
+//     console.log('Prediction result:', result);
 
-    // Extract the prediction text from the API response
-    const prediction = result.data[0];
+//     // Extract the prediction text from the API response
+//     const prediction = result.data[0];
 
-    // Return the prediction result as JSON
-    res.status(200).json({ prediction });
-  } catch (error) {
-    console.error('Error during prediction:', error.message);
-    res.status(500).json({ error: 'Prediction failed. ' + error.message });
-  } finally {
-    // Clean up the uploaded image file
-    if (fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-  }
-});
+//     // Return the prediction result as JSON
+//     res.status(200).json({ prediction });
+//   } catch (error) {
+//     console.error('Error during prediction:', error.message);
+//     res.status(500).json({ error: 'Prediction failed. ' + error.message });
+//   } finally {
+//     // Clean up the uploaded image file
+//     if (fs.existsSync(req.file.path)) {
+//       fs.unlinkSync(req.file.path);
+//     }
+//   }
+// });
 
 
 // Endpoint to handle email sending
