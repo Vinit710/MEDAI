@@ -1,17 +1,19 @@
 {
   "dependencies": {
-    "@gradio/client": "^1.5.1",
+    "@google/genai": "^1.15.0",
+    "@gradio/client": "^1.7.0",
     "axios": "^1.7.7",
     "express": "^4.19.2",
     "form-data": "^4.0.0",
     "fs": "^0.0.1-security",
+    "gradio": "^0.1.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.15",
     "path": "^0.12.7"
   },
   "type": "module",
   "scripts": {
-    "start": "node server.mjs"
+    "start": "node server.js"
   },
   "name": "medai",
   "version": "1.0.0",

@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 import { Client } from '@gradio/client';
 import bodyParser from 'body-parser';
 import nodemailer from 'nodemailer';
+import axios from 'axios';
+import { GoogleGenAI } from "@google/genai";
 
 // Define __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -198,27 +200,25 @@ app.post('/predict_skin', upload.single('input_image'), async (req, res) => {
   }
 });
 
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }); // Replace with your Gemini API key
+
 app.post('/chatbot', async (req, res) => {
   const userMessage = req.body.message;
 
   try {
-      // Call the API to get the chatbot's response
-      const result = await chatClient.predict('/chat', {
-          message: userMessage,
-          system_message: "You are a friendly chatbot.",  // Custom system message
-          max_tokens: 512,  // Define the max tokens for the response
-          temperature: 0.7,  // Control the randomness of the response
-          top_p: 0.95        // Control diversity via nucleus sampling
-      });
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash", // or "gemini-2.5-flash" if you want the latest
+      contents: [{ role: "user", parts: [{ text: userMessage }] }]
+    });
 
-      // Return the chatbot response to the front-end
-      res.json({ reply: result.data });
+    // The SDK returns a response object; extract the text
+    const reply = response?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, no response.";
+    res.json({ reply });
   } catch (error) {
-      console.error('Error communicating with the API:', error);
-      res.status(500).json({ reply: "Sorry, something went wrong with the chatbot." });
+    console.error('Gemini API error:', error.message, error.response?.data);
+    res.status(500).json({ reply: "Sorry, something went wrong with the chatbot." });
   }
 });
-
 
 // Symptom to Disease Prediction API endpoint
 app.post('/predict_symtodie', async (req, res) => {
