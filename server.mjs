@@ -18,10 +18,28 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 // Initialize the Gradio client
-const client = await Client.connect("Vinit710/GMED");  // Replace with your actual Gradio app
-const skinClient = await Client.connect("Vinit710/Skin_Disease");
-const chatClient = await Client.connect("Vinit710/Chatbot");
-const symtodieClient = await Client.connect('Vinit710/symtodise');
+let client, skinClient, chatClient, symtodieClient;
+try {
+  client = await Client.connect("Vinit710/GMED");
+} catch (e) {
+  console.error("Could not connect to Vinit710/GMED:", e.message);
+}
+try {
+  skinClient = await Client.connect("Vinit710/Skin_Disease");
+} catch (e) {
+  console.error("Could not connect to Vinit710/Skin_Disease:", e.message);
+}
+try {
+  chatClient = await Client.connect("peteparker456/medical_diagnosis_llama2");
+} catch (e) {
+  console.error("Could not connect to peteparker456/medical_diagnosis_llama2:", e.message);
+}
+try {
+  symtodieClient = await Client.connect('Vinit710/symtodise');
+} catch (e) {
+  console.error("Could not connect to Vinit710/symtodise:", e.message);
+}
+
 // Connect to the Hugging Face model via Gradio Client
 const xrayClient = await Client.connect("darksoule26/fracture");
 
