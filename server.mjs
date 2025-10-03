@@ -3,6 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 import { Client } from '@gradio/client';
 import bodyParser from 'body-parser';
 import nodemailer from 'nodemailer';
@@ -12,6 +13,20 @@ import { GoogleGenAI } from "@google/genai";
 // Define __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load environment variables from .env (if present)
+dotenv.config();
+
+// Normalize GEMINI_API_KEY (strip surrounding quotes if user added them)
+const rawGeminiKey = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = rawGeminiKey ? rawGeminiKey.replace(/^\s*"?(.*?)"?\s*$/, '$1') : undefined;
+if (GEMINI_API_KEY) {
+  // Mask the key when logging (show first/last 4 chars only)
+  const masked = GEMINI_API_KEY.length > 8 ? `${GEMINI_API_KEY.slice(0,4)}...${GEMINI_API_KEY.slice(-4)}` : '***';
+  console.log(`GEMINI_API_KEY loaded from environment (masked): ${masked}`);
+} else {
+  console.warn('GEMINI_API_KEY not found in environment. The Gemini client may attempt to use application default credentials.');
+}
 
 // Create uploads directory if it does not exist
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -200,14 +215,14 @@ app.post('/predict_skin', upload.single('input_image'), async (req, res) => {
   }
 });
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }); // Replace with your Gemini API key
+const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY }); // Uses GEMINI_API_KEY from environment or .env
 
 app.post('/chatbot', async (req, res) => {
   const userMessage = req.body.message;
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash", // or "gemini-2.5-flash" if you want the latest
+      model: "gemini-2.5-flash", // or "gemini-2.5-flash" if you want the latest
       contents: [{ role: "user", parts: [{ text: userMessage }] }]
     });
 
