@@ -49,6 +49,15 @@ node server.mjs
 
 By default, the server will start on `http://localhost:3000`.
 
+
+## Environment variables (.env)
+
+Create a `.env` file in the project root with the following line (do NOT commit this file):
+
+```env
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE
+```
+
 ## Project Structure
 ```
 .
@@ -128,5 +137,60 @@ Here are some screenshots of the application:
 This project is licensed under the MIT License.
 
 
-### Usage Instructions
-Make sure to replace the placeholder `Gradio` model paths in the code with actual model paths from Gradio once they're available. You can further customize the design in the `templates` directory to fit your style preferences.
+
+
+
+## Contributing (Hacktober Friendly)
+
+Thanks for opening this repository for Hacktober! We welcome contributions of all sizes — bug fixes, new features, tests, documentation, and CI/CD improvements. Below are guidelines to help you get started.
+
+1. Fork the repository and create a branch for your change. Use meaningful branch names, e.g. `feature/add-xray-model` or `fix/predict-endpoint-bug`.
+2. Keep PRs small and focused: one feature, one bugfix, or one set of tests per PR.
+3. Add tests for any behavior you change or add. We prefer lightweight tests that run quickly.
+4. Write a clear PR description explaining the problem, the change, and how to test it locally.
+5. Be responsive to review comments; maintainers may ask for small changes before merging.
+
+Labeling and Hacktober rules
+- Include `hacktoberfest-accepted` as a label if your PR meets the contribution criteria for the event (maintainers will add this after review).
+
+What to contribute
+- New features: small, well-scoped features (e.g. a new model endpoint, CLI helper, or small UI improvement).
+- Tests: unit tests for server endpoints or utilities. Prefer Node test runners such as Jest or AVA.
+- CI/CD: Add GitHub Actions workflows for linting, tests, and automated deployment (example below).
+- Docs: Improve README, add setup guides, or fix typos.
+
+
+CI/CD (suggested GitHub Actions)
+- Add workflows in `.github/workflows/` to run tests on push/PR and optionally deploy on push to `main`.
+- Example jobs to include:
+   - install-deps (npm ci)
+   - lint (eslint)
+   - test (npm test)
+   - build & deploy (optional — e.g., to Vercel or Azure Static Web Apps)
+
+Example minimal GitHub Actions workflow (place in `.github/workflows/ci.yml`):
+
+```yaml
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+   test:
+      runs-on: ubuntu-latest
+      steps:
+         - uses: actions/checkout@v4
+         - name: Use Node.js
+            uses: actions/setup-node@v4
+            with:
+               node-version: '18'
+         - name: Install dependencies
+            run: npm ci
+         - name: Run tests
+            run: npm test
+
+```
+
+
+
+Thank you for contributing!
